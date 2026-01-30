@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:structure_flutter/core/helpers/constants.dart';
 import 'package:structure_flutter/core/helpers/shared_pref_helper.dart';
 
 class DioFactory {
@@ -25,23 +24,23 @@ class DioFactory {
   }
 
   static void addDioHeaders() async {
-    final token = await SharedPrefHelper.getSecuredString(
-      SharedPrefKeys.userToken,
-    );
+    // final token = await SharedPrefHelper.getSecuredString(
+    //   SharedPrefKeys.userToken,
+    // );
     final language = await SharedPrefHelper.getString(
       SharedPrefKeys.userLanguage,
     );
 
-    if (token == null || token.isEmpty) {
-      dio?.options.headers = {
-        'Accept': 'application/json',
-        'Accept-Language': language ?? 'en',
-      };
-      return;
-    }
+    // if (token == null || token.isEmpty) {
+    //   dio?.options.headers = {
+    //     'Accept': 'application/json',
+    //     'Accept-Language': language ?? 'en',
+    //   };
+    //   return;
+    // }
     dio?.options.headers = {
       'Accept': 'application/json',
-      'Authorization': 'Bearer $token',
+      // 'Authorization': 'Bearer $token',
       'Accept-Language': language ?? 'en',
     };
   }

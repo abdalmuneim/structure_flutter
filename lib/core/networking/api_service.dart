@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:structure_flutter/core/networking/apis_constant.dart';
+import 'package:structure_flutter/presentaions/modules/login/models/login_response.dart';
+import 'package:structure_flutter/presentaions/modules/register/models/register_response.dart';
 
 part 'api_service.g.dart';
 
@@ -9,8 +11,8 @@ abstract class ApiService {
   factory ApiService(Dio dio, {String baseUrl}) = _ApiService;
 
   @POST(ApiConstants.login)
-  Future<dynamic> login(@Body() dynamic loginRequestBody);
+  Future<LoginResponse> login(@Body() Map<String, dynamic> body);
 
   @POST(ApiConstants.signup)
-  Future<dynamic> signup(@Body() dynamic signupRequestBody);
+  Future<RegisterResponse> register(@Body() Map<String, dynamic> body);
 }

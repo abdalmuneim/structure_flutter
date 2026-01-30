@@ -2,6 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+class SharedPrefKeys {
+  static const String userToken = 'userToken';
+  static const String userLanguage = 'userLanguage';
+  static const String onboardingCompleted = 'onboardingCompleted';
+}
+
 class SharedPrefHelper {
   // private constructor as I don't want to allow creating an instance of this class itself.
   SharedPrefHelper._();

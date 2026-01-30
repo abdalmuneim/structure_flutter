@@ -1,16 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:structure_flutter/core/networking/api_error_handler.dart';
 import 'package:structure_flutter/core/networking/api_error_model.dart';
-import 'package:structure_flutter/core/networking/api_result.dart';
 
-class BaseProvider extends ChangeNotifier {
+/// Provider for scenes that have **no** form model (e.g. Splash, Settings).
+class BaseProvider<D extends Object?> extends ChangeNotifier {
   bool _isLoading = false;
   ApiErrorModel? _error;
+  String? _errorMessage;
+  String? _successMessage;
   bool _isDisposed = false;
+
+  D? model;
 
   bool get isLoading => _isLoading;
   ApiErrorModel? get error => _error;
-  bool get hasError => _error != null;
+  String? get errorMessage => _errorMessage;
+  String? get successMessage => _successMessage;
+  bool get hasError => _error != null || _errorMessage != null;
+  bool get hasSuccess => _successMessage != null;
 
   void setLoading(bool value) {
     _isLoading = value;
@@ -19,44 +25,30 @@ class BaseProvider extends ChangeNotifier {
 
   void setError(ApiErrorModel? error) {
     _error = error;
+    _errorMessage = error?.message;
+    _safeNotifyListeners();
+  }
+
+  void setErrorMessage(String? message) {
+    _errorMessage = message;
+
+    _safeNotifyListeners();
+  }
+
+  void setSuccess(String message) {
+    _successMessage = message;
     _safeNotifyListeners();
   }
 
   void clearError() {
     _error = null;
+    _errorMessage = null;
     _safeNotifyListeners();
   }
 
-  /// Executes an API call with automatic loading and error handling.
-  ///
-  /// [apiCall] - the future that returns an [ApiResult].
-  /// [onSuccess] - callback when the API call succeeds.
-  /// [onError] - optional callback for custom error handling.
-  Future<void> executeApi<T>({
-    required Future<ApiResult<T>> Function() apiCall,
-    required Function(T data) onSuccess,
-    Function(ApiErrorModel error)? onError,
-  }) async {
-    setLoading(true);
-    clearError();
-    try {
-      final result = await apiCall();
-      result.when(
-        success: (data) {
-          onSuccess(data);
-        },
-        failure: (errorHandler) {
-          setError(errorHandler.apiErrorModel);
-          onError?.call(errorHandler.apiErrorModel);
-        },
-      );
-    } catch (e) {
-      final handler = ErrorHandler.handle(e);
-      setError(handler.apiErrorModel);
-      onError?.call(handler.apiErrorModel);
-    } finally {
-      setLoading(false);
-    }
+  void clearSuccess() {
+    _successMessage = null;
+    _safeNotifyListeners();
   }
 
   void _safeNotifyListeners() {
