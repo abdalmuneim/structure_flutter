@@ -31,6 +31,7 @@ class DioFactory {
     final language = await SharedPrefHelper.getString(
       SharedPrefKeys.userLanguage,
     );
+
     if (token == null || token.isEmpty) {
       dio?.options.headers = {
         'Accept': 'application/json',

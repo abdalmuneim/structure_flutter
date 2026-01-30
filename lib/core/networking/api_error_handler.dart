@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:dio/dio.dart';
 
 import 'apis_constant.dart';
@@ -43,26 +41,26 @@ class ResponseCode {
 
 class ResponseMessage {
   static const String noContent =
-      ApiErrors.noContent; // success with no data (no content)
+      ApiErrorsMessage.noContent; // success with no data (no content)
   static const String badRequest =
-      ApiErrors.badRequestError; // failure, API rejected request
+      ApiErrorsMessage.badRequestError; // failure, API rejected request
   static const String unauthorised =
-      ApiErrors.unauthorizedError; // failure, user is not authorised
+      ApiErrorsMessage.unauthorizedError; // failure, user is not authorised
   static const String forbidden =
-      ApiErrors.forbiddenError; //  failure, API rejected request
+      ApiErrorsMessage.forbiddenError; //  failure, API rejected request
   static const String internalServerError =
-      ApiErrors.internalServerError; // failure, crash in server side
+      ApiErrorsMessage.internalServerError; // failure, crash in server side
   static const String notFound =
-      ApiErrors.notFoundError; // failure, crash in server side
+      ApiErrorsMessage.notFoundError; // failure, crash in server side
 
   // local status code
-  static String connectTimeout = ApiErrors.timeoutError;
-  static String cancel = ApiErrors.defaultError;
-  static String recieveTimeout = ApiErrors.timeoutError;
-  static String sendTimeout = ApiErrors.timeoutError;
-  static String cacheError = ApiErrors.cacheError;
-  static String noInternetConnection = ApiErrors.noInternetError;
-  static String defaultError = ApiErrors.defaultError;
+  static String connectTimeout = ApiErrorsMessage.timeoutError;
+  static String cancel = ApiErrorsMessage.defaultError;
+  static String recieveTimeout = ApiErrorsMessage.timeoutError;
+  static String sendTimeout = ApiErrorsMessage.timeoutError;
+  static String cacheError = ApiErrorsMessage.cacheError;
+  static String noInternetConnection = ApiErrorsMessage.noInternetError;
+  static String defaultError = ApiErrorsMessage.defaultError;
 }
 
 extension DataSourceExtension on DataSource {
@@ -159,61 +157,27 @@ ApiErrorModel _handleError(DioException error) {
       return DataSource.sendTimeout.getFailure();
     case DioExceptionType.receiveTimeout:
       return DataSource.recieveTimeout.getFailure();
+    case DioExceptionType.badResponse:
+      if (error.response != null &&
+          error.response?.statusCode != null &&
+          error.response?.statusMessage != null) {
+        return ApiErrorModel.fromJson(error.response!.data);
+      } else {
+        return DataSource.defaultError.getFailure();
+      }
+    case DioExceptionType.unknown:
+      if (error.response != null &&
+          error.response?.statusCode != null &&
+          error.response?.statusMessage != null) {
+        return ApiErrorModel.fromJson(error.response!.data);
+      } else {
+        return DataSource.defaultError.getFailure();
+      }
     case DioExceptionType.cancel:
       return DataSource.cancel.getFailure();
     case DioExceptionType.connectionError:
-      // Could be DNS/host lookup or no network
-      return DataSource.noInternetConnection.getFailure();
-    case DioExceptionType.badCertificate:
       return DataSource.defaultError.getFailure();
-
-    case DioExceptionType.badResponse:
-    case DioExceptionType.unknown:
-      // Try to parse API error body when available and it's a JSON map
-      final resp = error.response;
-      if (resp != null && resp.data != null) {
-        try {
-          if (resp.data is Map<String, dynamic>) {
-            return ApiErrorModel.fromJson(resp.data as Map<String, dynamic>);
-          }
-          // If data is a JSON string, try decoding it
-          if (resp.data is String) {
-            try {
-              final decoded = resp.data as String;
-              final dynamic jsonObj = decoded.isNotEmpty
-                  ? jsonDecode(decoded)
-                  : null;
-              if (jsonObj is Map<String, dynamic>) {
-                return ApiErrorModel.fromJson(jsonObj);
-              }
-            } catch (_) {
-              // fallthrough to status code mapping
-            }
-          }
-        } catch (_) {
-          // parsing failed, fallthrough to status code mapping
-        }
-
-        // Fallback: map common HTTP status codes to DataSource
-        final status = resp.statusCode;
-        switch (status) {
-          case ResponseCode.badRequest:
-            return DataSource.badRequest.getFailure();
-          case ResponseCode.unauthorised:
-            return DataSource.unauthorised.getFailure();
-          case ResponseCode.forbidden:
-            return DataSource.forbidden.getFailure();
-          case ResponseCode.notFound:
-            return DataSource.notFound.getFailure();
-          case ResponseCode.internalServerError:
-            return DataSource.internalServerError.getFailure();
-          case ResponseCode.noContent:
-            return DataSource.noContent.getFailure();
-          default:
-            return DataSource.defaultError.getFailure();
-        }
-      }
-
+    case DioExceptionType.badCertificate:
       return DataSource.defaultError.getFailure();
   }
 }
