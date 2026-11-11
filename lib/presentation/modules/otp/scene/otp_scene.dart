@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart' hide TextDirection;
 import 'package:structure_flutter/core/bases/base_scene.dart';
 import 'package:structure_flutter/core/helpers/app_validator.dart';
 import 'package:structure_flutter/core/localization/l10n_extension.dart';
@@ -32,7 +33,7 @@ class _OtpSceneState extends BaseSceneState<OtpProvider> {
             children: [
               AuthHeader(
                 title: context.l10n.otpTitle(OtpProvider.codeLength),
-                subtitle: context.l10n.otpSubtitle(p.phone),
+                subtitle: context.l10n.otpSubtitle(context.ltr(p.phone)),
                 icon: Icons.sms_outlined,
                 onBack: isRegistration ? p.backToLogin : navigator.maybePop,
               ),
@@ -73,16 +74,21 @@ class _OtpSceneState extends BaseSceneState<OtpProvider> {
 
   Widget _resendRow(OtpProvider p) {
     if (p.remainingSeconds > 0) {
-      final minutes = (p.remainingSeconds ~/ 60).toString().padLeft(2, '0');
-      final seconds = (p.remainingSeconds % 60).toString().padLeft(2, '0');
+      // Two digits each, in the current locale's digits.
+      final twoDigits = NumberFormat('00', context.l10n.localeName);
+      final minutes = twoDigits.format(p.remainingSeconds ~/ 60);
+      final seconds = twoDigits.format(p.remainingSeconds % 60);
       return Text(
         context.l10n.otpResendCountdown('$minutes:$seconds'),
         textAlign: TextAlign.center,
         style: TextStyle(fontSize: 14, color: Colors.grey[700]),
       );
     }
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+    // Wrap, not Row: the two parts go on two lines when they don't fit
+    // (longer languages, narrow screens).
+    return Wrap(
+      alignment: WrapAlignment.center,
+      crossAxisAlignment: WrapCrossAlignment.center,
       children: [
         Text(
           context.l10n.otpDidNotReceive,
@@ -107,6 +113,8 @@ class _CodeField extends StatelessWidget {
       controller: controller,
       autofocus: true,
       textAlign: TextAlign.center,
+      // Codes are typed and read left to right in every language.
+      textDirection: TextDirection.ltr,
       keyboardType: TextInputType.number,
       autofillHints: const [AutofillHints.oneTimeCode],
       inputFormatters: [

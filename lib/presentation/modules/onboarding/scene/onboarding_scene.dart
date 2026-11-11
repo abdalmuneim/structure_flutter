@@ -134,56 +134,60 @@ class _OnboardingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 32),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          // Decorative circle with icon
-          Container(
-            width: 160,
-            height: 160,
-            decoration: BoxDecoration(
-              color: accentColor.withValues(alpha: 0.1),
-              shape: BoxShape.circle,
-            ),
-            child: Center(
-              child: Container(
-                width: 100,
-                height: 100,
-                decoration: BoxDecoration(
-                  color: accentColor.withValues(alpha: 0.15),
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(
-                  item.icon,
-                  size: 52,
-                  color: accentColor,
+    // Centered; scrolls instead of overflowing when the text doesn't fit
+    // (longer translations, small phones, large font settings).
+    return Center(
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(horizontal: 32),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Decorative circle with icon
+            Container(
+              width: 160,
+              height: 160,
+              decoration: BoxDecoration(
+                color: accentColor.withValues(alpha: 0.1),
+                shape: BoxShape.circle,
+              ),
+              child: Center(
+                child: Container(
+                  width: 100,
+                  height: 100,
+                  decoration: BoxDecoration(
+                    color: accentColor.withValues(alpha: 0.15),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(
+                    item.icon,
+                    size: 52,
+                    color: accentColor,
+                  ),
                 ),
               ),
             ),
-          ),
-          const SizedBox(height: 48),
-          Text(
-            item.title,
-            style: const TextStyle(
-              fontSize: 28,
-              fontWeight: FontWeight.bold,
-              color: AppColors.primary,
+            const SizedBox(height: 48),
+            Text(
+              item.title,
+              style: const TextStyle(
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+                color: AppColors.primary,
+              ),
+              textAlign: TextAlign.center,
             ),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 16),
-          Text(
-            item.description,
-            style: TextStyle(
-              fontSize: 16,
-              color: Colors.grey[600],
-              height: 1.5,
+            const SizedBox(height: 16),
+            Text(
+              item.description,
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.grey[600],
+                height: 1.5,
+              ),
+              textAlign: TextAlign.center,
             ),
-            textAlign: TextAlign.center,
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

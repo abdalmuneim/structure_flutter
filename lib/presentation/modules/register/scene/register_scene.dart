@@ -28,8 +28,8 @@ class _RegisterSceneState extends BaseSceneState<RegisterProvider> {
                   ? context.l10n.registerSuccessTitle
                   : context.l10n.registerTitle,
               subtitle: p.accountCreated
-                  ? context.l10n.registerSuccessSubtitle(p.phone)
-                  : context.l10n.registerSubtitle(p.phone),
+                  ? context.l10n.registerSuccessSubtitle(context.ltr(p.phone))
+                  : context.l10n.registerSubtitle(context.ltr(p.phone)),
               onBack: p.accountCreated ? null : () => navigator.maybePop(),
             ),
             Padding(

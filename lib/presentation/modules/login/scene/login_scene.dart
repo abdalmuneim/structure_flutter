@@ -40,6 +40,8 @@ class _LoginSceneState extends BaseSceneState<LoginProvider> {
                       hint: '01012345678',
                       controller: p.phoneController,
                       keyboardType: TextInputType.phone,
+                      // +20 and the number read left to right in Arabic too.
+                      textDirection: TextDirection.ltr,
                       icon: const Padding(
                         padding: EdgeInsets.symmetric(horizontal: 14),
                         child: Text(

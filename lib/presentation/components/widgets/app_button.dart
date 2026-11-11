@@ -129,9 +129,15 @@ class ChildButton extends StatelessWidget {
         icon != null || fontAwesomeIcon != null
             ? const SizedBox(width: 5)
             : const SizedBox(width: 5),
-        Text(
-          title,
-          style: TextStyle(fontSize: fontSize, fontWeight: fontWeight),
+        // Flexible + ellipsis: a long (e.g. translated) title shrinks
+        // instead of overflowing the button.
+        Flexible(
+          child: Text(
+            title,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(fontSize: fontSize, fontWeight: fontWeight),
+          ),
         ),
         if (prefixIcon != null)
           Row(

@@ -34,6 +34,10 @@ class RouteTransition {
           builder(context, settings.arguments),
       transitionDuration: duration,
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        // Horizontal slides follow the reading direction: in Arabic (RTL)
+        // "rightToLeft" comes in from the left, so "forward" feels the same
+        // in both languages.
+        final dx = Directionality.of(context) == TextDirection.rtl ? -1.0 : 1.0;
         switch (transition) {
           case TransitionType.fadeIn:
             return FadeTransition(opacity: animation, child: child);
@@ -42,7 +46,7 @@ class RouteTransition {
           case TransitionType.rightToLeft:
             return SlideTransition(
               position: Tween<Offset>(
-                begin: const Offset(1.0, 0.0),
+                begin: Offset(dx, 0.0),
                 end: Offset.zero,
               ).animate(animation),
               child: child,
@@ -50,7 +54,7 @@ class RouteTransition {
           case TransitionType.leftToRight:
             return SlideTransition(
               position: Tween<Offset>(
-                begin: const Offset(-1.0, 0.0),
+                begin: Offset(-dx, 0.0),
                 end: Offset.zero,
               ).animate(animation),
               child: child,
@@ -88,7 +92,7 @@ class RouteTransition {
               children: <Widget>[
                 SlideTransition(
                   position: Tween<Offset>(
-                    begin: const Offset(1.0, 0.0),
+                    begin: Offset(dx, 0.0),
                     end: Offset.zero,
                   ).animate(animation),
                   child: FadeTransition(
@@ -103,7 +107,7 @@ class RouteTransition {
               children: <Widget>[
                 SlideTransition(
                   position: Tween<Offset>(
-                    begin: const Offset(-1.0, 0.0),
+                    begin: Offset(-dx, 0.0),
                     end: Offset.zero,
                   ).animate(animation),
                   child: FadeTransition(

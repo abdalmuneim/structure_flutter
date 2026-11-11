@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:structure_flutter/core/helpers/constants.dart';
 import 'package:structure_flutter/core/localization/l10n_extension.dart';
 
 import 'package:structure_flutter/presentation/components/extensions/widget_extension.dart';
@@ -50,6 +49,11 @@ class AppTextField extends StatefulWidget {
   final String? errorMessage;
   final EdgeInsetsGeometry? contentPadding;
 
+  /// Forces the input box's direction, e.g. [TextDirection.ltr] for phone
+  /// numbers and codes so they read left to right in Arabic too.
+  /// Null (default) follows the app language.
+  final TextDirection? textDirection;
+
   const AppTextField({
     this.hint,
     this.label = "",
@@ -90,6 +94,7 @@ class AppTextField extends StatefulWidget {
     this.errorMessage,
     this.contentPadding,
     this.suffixIconConstraints,
+    this.textDirection,
     super.key,
   });
 
@@ -127,7 +132,7 @@ class _AppTextFieldState extends State<AppTextField> {
               5.height,
             ],
           ),
-        TextFormField(
+        _withTextDirection(TextFormField(
           key: widget.key,
           textAlign: widget.textAlign,
           style: const TextStyle(
@@ -175,7 +180,6 @@ class _AppTextFieldState extends State<AppTextField> {
             errorMaxLines: 2,
             hintStyle: Theme.of(context).textTheme.titleMedium!.copyWith(
               color: const Color(0xffC5C5C5),
-              fontFamily: AppConstants.arabicAppFont,
               fontWeight: FontWeight.normal,
               fontSize: 13,
             ),
@@ -278,9 +282,15 @@ class _AppTextFieldState extends State<AppTextField> {
                 }
               : null,
           obscureText: widget.obscureText,
-        ),
+        )),
         if (errorMessage != null) inputError(errorMessage!),
       ],
     );
   }
+
+  /// Applies [AppTextField.textDirection] to the input box (text, prefix and
+  /// suffix); the title and the error keep the screen's direction.
+  Widget _withTextDirection(Widget field) => widget.textDirection == null
+      ? field
+      : Directionality(textDirection: widget.textDirection!, child: field);
 }
