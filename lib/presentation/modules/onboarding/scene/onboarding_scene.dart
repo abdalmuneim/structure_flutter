@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:structure_flutter/core/bases/base_scene.dart';
+import 'package:structure_flutter/core/localization/l10n_extension.dart';
 import 'package:structure_flutter/presentation/components/utils/ui/ui.dart';
 import 'package:structure_flutter/presentation/components/widgets/app_button.dart';
 import 'package:structure_flutter/presentation/components/widgets/language_switcher.dart';
@@ -44,7 +45,7 @@ class _OnboardingSceneState
                   TextButton(
                     onPressed: () => provider.skip(),
                     child: Text(
-                      'Skip',
+                      context.l10n.onboardingSkip,
                       style: TextStyle(
                         fontSize: 15,
                         color: Colors.grey[500],
@@ -83,7 +84,10 @@ class _OnboardingSceneState
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    '${p.currentPage + 1}/${p.items.length}',
+                    context.l10n.onboardingPageIndicator(
+                      p.currentPage + 1,
+                      p.items.length,
+                    ),
                     style: TextStyle(
                       fontSize: 13,
                       color: Colors.grey[400],
@@ -98,7 +102,9 @@ class _OnboardingSceneState
             Padding(
               padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
               child: AppButton(
-                title: p.isLastPage ? 'Get Started' : 'Next',
+                title: p.isLastPage
+                    ? context.l10n.commonGetStarted
+                    : context.l10n.commonNext,
                 gradient: p.isLastPage,
                 shadow: p.isLastPage,
                 backgroundColor: p.isLastPage ? null : AppColors.primary,

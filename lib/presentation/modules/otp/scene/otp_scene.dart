@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:structure_flutter/core/bases/base_scene.dart';
 import 'package:structure_flutter/core/helpers/app_validator.dart';
+import 'package:structure_flutter/core/localization/l10n_extension.dart';
 import 'package:structure_flutter/presentation/components/utils/ui/ui.dart';
 import 'package:structure_flutter/presentation/components/widgets/app_button.dart';
 import 'package:structure_flutter/presentation/components/widgets/auth_header.dart';
@@ -30,8 +31,8 @@ class _OtpSceneState extends BaseSceneState<OtpProvider> {
           child: Column(
             children: [
               AuthHeader(
-                title: 'Enter 4 digit OTP Code',
-                subtitle: 'We sent a code to ${p.phone}',
+                title: context.l10n.otpTitle(OtpProvider.codeLength),
+                subtitle: context.l10n.otpSubtitle(p.phone),
                 icon: Icons.sms_outlined,
                 onBack: isRegistration ? p.backToLogin : navigator.maybePop,
               ),
@@ -49,7 +50,7 @@ class _OtpSceneState extends BaseSceneState<OtpProvider> {
                       ),
                       const SizedBox(height: 28),
                       AppButton(
-                        title: 'Continue',
+                        title: context.l10n.commonContinue,
                         gradient: true,
                         shadow: true,
                         onPressed: p.verify,
@@ -75,7 +76,7 @@ class _OtpSceneState extends BaseSceneState<OtpProvider> {
       final minutes = (p.remainingSeconds ~/ 60).toString().padLeft(2, '0');
       final seconds = (p.remainingSeconds % 60).toString().padLeft(2, '0');
       return Text(
-        'You can send again after $minutes:$seconds',
+        context.l10n.otpResendCountdown('$minutes:$seconds'),
         textAlign: TextAlign.center,
         style: TextStyle(fontSize: 14, color: Colors.grey[700]),
       );
@@ -84,10 +85,10 @@ class _OtpSceneState extends BaseSceneState<OtpProvider> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          'Didn’t receive the code?',
+          context.l10n.otpDidNotReceive,
           style: TextStyle(fontSize: 14, color: Colors.grey[700]),
         ),
-        TextButton(onPressed: p.resend, child: const Text('Resend OTP')),
+        TextButton(onPressed: p.resend, child: Text(context.l10n.otpResend)),
       ],
     );
   }

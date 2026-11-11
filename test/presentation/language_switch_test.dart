@@ -52,5 +52,24 @@ void main() {
     expect(_directionOf(tester), TextDirection.rtl);
     expect(find.text('English'), findsOneWidget);
     expect(await SharedPrefHelper.getString(SharedPrefKeys.userLanguage), 'ar');
+    // The page texts come from the provider (AppL10n), not the widget tree.
+    expect(find.text('مرحبًا بك في VCare'), findsOneWidget);
+  });
+
+  testWidgets('Arabic: onboarding -> phone screen -> Arabic form error', (
+    tester,
+  ) async {
+    await _openOnboarding(tester, 'ar');
+    expect(find.text('مرحبًا بك في VCare'), findsOneWidget);
+    expect(find.text('1 من 3'), findsOneWidget);
+
+    await tester.tap(find.text('تخطٍّ'));
+    await _settle(tester);
+    expect(find.text('تسجيل الدخول'), findsOneWidget);
+
+    await tester.enterText(find.byType(TextFormField), '123');
+    await tester.tap(find.text('ابدأ الآن'));
+    await _settle(tester);
+    expect(find.text('أدخل رقم هاتف صحيحًا'), findsWidgets);
   });
 }

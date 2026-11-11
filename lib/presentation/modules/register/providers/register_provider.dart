@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:structure_flutter/core/bases/base_provider.dart';
+import 'package:structure_flutter/core/localization/app_l10n.dart';
 import 'package:structure_flutter/core/routing/route_path.dart';
 import 'package:structure_flutter/data/models/register_request.dart';
 import 'package:structure_flutter/domain/use_cases/register_use_case.dart';
@@ -62,7 +63,7 @@ class RegisterProvider extends BaseProvider {
 
   Future<void> register() async {
     if (!_termsAccepted) {
-      showError('You must accept the terms and conditions to proceed');
+      showError(AppL10n.current.registerTermsRequired);
       return;
     }
 

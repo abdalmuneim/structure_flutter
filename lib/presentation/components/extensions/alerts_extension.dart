@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:structure_flutter/core/localization/l10n_extension.dart';
 import 'package:structure_flutter/presentation/components/extensions/builder_extension.dart';
 import 'package:structure_flutter/presentation/components/utils/ui/alert.dart';
 import 'package:structure_flutter/presentation/components/utils/ui/rich_alert_dialog.dart';
@@ -121,7 +122,7 @@ extension Alerts on State {
                   Text(message),
                   const SizedBox(height: 20),
                   AppButton(
-                    title: "ok",
+                    title: context.l10n.commonOk,
                     onPressed: () {
                       pop();
                     },

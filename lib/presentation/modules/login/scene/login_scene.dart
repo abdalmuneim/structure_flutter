@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:structure_flutter/core/bases/base_scene.dart';
 import 'package:structure_flutter/core/helpers/app_validator.dart';
+import 'package:structure_flutter/core/localization/l10n_extension.dart';
 import 'package:structure_flutter/presentation/components/utils/ui/ui.dart';
 import 'package:structure_flutter/presentation/components/widgets/app_button.dart';
 import 'package:structure_flutter/presentation/components/widgets/app_textfield.dart';
@@ -22,9 +23,9 @@ class _LoginSceneState extends BaseSceneState<LoginProvider> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            const AuthHeader(
-              title: 'Let’s Sign In',
-              subtitle: 'Enter your phone number to get started',
+            AuthHeader(
+              title: context.l10n.authLoginTitle,
+              subtitle: context.l10n.authLoginSubtitle,
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -35,7 +36,7 @@ class _LoginSceneState extends BaseSceneState<LoginProvider> {
                   children: [
                     const SizedBox(height: 8),
                     AppTextField(
-                      title: 'Phone Number',
+                      title: context.l10n.authPhoneLabel,
                       hint: '01012345678',
                       controller: p.phoneController,
                       keyboardType: TextInputType.phone,
@@ -58,12 +59,12 @@ class _LoginSceneState extends BaseSceneState<LoginProvider> {
                     ),
                     const SizedBox(height: 12),
                     Text(
-                      'New here? You will create your account in the next step.',
+                      context.l10n.authLoginNewUserHint,
                       style: TextStyle(fontSize: 13, color: Colors.grey[600]),
                     ),
                     const SizedBox(height: 28),
                     AppButton(
-                      title: 'Get Started',
+                      title: context.l10n.commonGetStarted,
                       gradient: true,
                       shadow: true,
                       onPressed: p.continueWithPhone,

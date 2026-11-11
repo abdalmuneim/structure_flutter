@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:structure_flutter/core/bases/base_provider.dart';
 import 'package:structure_flutter/core/helpers/shared_pref_helper.dart';
+import 'package:structure_flutter/core/localization/app_l10n.dart';
 import 'package:structure_flutter/core/routing/route_path.dart';
 import 'package:structure_flutter/presentation/modules/onboarding/models/onboarding_item.dart';
 
@@ -10,23 +11,28 @@ class OnboardingProvider extends BaseProvider {
   int _currentPage = 0;
   int get currentPage => _currentPage;
 
-  final List<OnboardingItem> items = const [
-    OnboardingItem(
-      title: 'Welcome to VCare',
-      description: 'Your health is our priority. Get access to top doctors and medical services.',
-      icon: Icons.local_hospital,
-    ),
-    OnboardingItem(
-      title: 'Book Appointments',
-      description: 'Schedule appointments with specialists easily and quickly.',
-      icon: Icons.calendar_month,
-    ),
-    OnboardingItem(
-      title: 'Get Started',
-      description: 'Create your account and start your health journey today.',
-      icon: Icons.rocket_launch,
-    ),
-  ];
+  /// A getter, not a field, so the texts follow the current language when
+  /// the user switches it on this screen.
+  List<OnboardingItem> get items {
+    final l10n = AppL10n.current;
+    return [
+      OnboardingItem(
+        title: l10n.onboardingWelcomeTitle,
+        description: l10n.onboardingWelcomeDescription,
+        icon: Icons.local_hospital,
+      ),
+      OnboardingItem(
+        title: l10n.onboardingBookTitle,
+        description: l10n.onboardingBookDescription,
+        icon: Icons.calendar_month,
+      ),
+      OnboardingItem(
+        title: l10n.onboardingStartTitle,
+        description: l10n.onboardingStartDescription,
+        icon: Icons.rocket_launch,
+      ),
+    ];
+  }
 
   bool get isLastPage => _currentPage == items.length - 1;
 

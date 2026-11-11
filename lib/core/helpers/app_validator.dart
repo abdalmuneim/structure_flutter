@@ -1,11 +1,19 @@
+import 'package:structure_flutter/core/localization/app_l10n.dart';
+import 'package:structure_flutter/l10n/app_localizations.dart';
+
+/// Form validators. Messages are in the current app language
+/// ([AppL10n.current]); a `fieldName` passed in should already be translated
+/// (e.g. `context.l10n.registerFirstNameField`).
 class AppValidator {
   AppValidator._();
 
+  static AppLocalizations get _l10n => AppL10n.current;
+
   // ──────────────────────────── Required ────────────────────────────
 
-  static String? required(String? value, [String fieldName = 'This field']) {
+  static String? required(String? value, [String? fieldName]) {
     if (value == null || value.trim().isEmpty) {
-      return '$fieldName is required';
+      return _requiredMessage(fieldName);
     }
     return null;
   }
@@ -15,17 +23,23 @@ class AppValidator {
   static final _emailRegex = RegExp(r'^[\w\-\.]+@([\w\-]+\.)+[\w\-]{2,4}$');
 
   static String? email(String? value) {
-    if (value == null || value.trim().isEmpty) return 'Email is required';
-    if (!_emailRegex.hasMatch(value.trim())) return 'Enter a valid email';
+    if (value == null || value.trim().isEmpty) {
+      return _l10n.validationEmailRequired;
+    }
+    if (!_emailRegex.hasMatch(value.trim())) {
+      return _l10n.validationEmailInvalid;
+    }
     return null;
   }
 
   // ──────────────────────────── Password ────────────────────────────
 
   static String? password(String? value, {int minLength = 6}) {
-    if (value == null || value.isEmpty) return 'Password is required';
+    if (value == null || value.isEmpty) {
+      return _l10n.validationPasswordRequired;
+    }
     if (value.length < minLength) {
-      return 'Password must be at least $minLength characters';
+      return _l10n.validationPasswordMinLength(minLength);
     }
     return null;
   }
@@ -33,7 +47,7 @@ class AppValidator {
   static String? confirmPassword(String? value, String password) {
     final error = AppValidator.password(value);
     if (error != null) return error;
-    if (value != password) return 'Passwords do not match';
+    if (value != password) return _l10n.validationPasswordsMismatch;
     return null;
   }
 
@@ -41,12 +55,14 @@ class AppValidator {
       RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$');
 
   static String? strongPassword(String? value, {int minLength = 8}) {
-    if (value == null || value.isEmpty) return 'Password is required';
+    if (value == null || value.isEmpty) {
+      return _l10n.validationPasswordRequired;
+    }
     if (value.length < minLength) {
-      return 'Password must be at least $minLength characters';
+      return _l10n.validationPasswordMinLength(minLength);
     }
     if (!_strongPasswordRegex.hasMatch(value)) {
-      return 'Must include uppercase, lowercase, number, and special character';
+      return _l10n.validationPasswordWeak;
     }
     return null;
   }
@@ -56,9 +72,11 @@ class AppValidator {
   static final _phoneRegex = RegExp(r'^\+?[0-9]{7,15}$');
 
   static String? phone(String? value) {
-    if (value == null || value.trim().isEmpty) return 'Phone number is required';
+    if (value == null || value.trim().isEmpty) {
+      return _l10n.validationPhoneRequired;
+    }
     if (!_phoneRegex.hasMatch(value.trim())) {
-      return 'Enter a valid phone number';
+      return _l10n.validationPhoneInvalid;
     }
     return null;
   }
@@ -68,9 +86,11 @@ class AppValidator {
   static final _usernameRegex = RegExp(r'^[a-zA-Z0-9._]{3,30}$');
 
   static String? username(String? value) {
-    if (value == null || value.trim().isEmpty) return 'Username is required';
+    if (value == null || value.trim().isEmpty) {
+      return _l10n.validationUsernameRequired;
+    }
     if (!_usernameRegex.hasMatch(value.trim())) {
-      return 'Username must be 3-30 chars (letters, numbers, . or _)';
+      return _l10n.validationUsernameInvalid;
     }
     return null;
   }
@@ -82,10 +102,10 @@ class AppValidator {
   /// 11 digits starting with 010, 011, 012 or 015 (same rule as lawmate).
   static String? egyptianPhone(String? value) {
     if (value == null || value.trim().isEmpty) {
-      return 'Phone field is required';
+      return _l10n.validationPhoneRequired;
     }
     if (!_egyptianPhoneRegex.hasMatch(value.trim())) {
-      return 'Enter a valid phone number';
+      return _l10n.validationPhoneInvalid;
     }
     return null;
   }
@@ -95,16 +115,17 @@ class AppValidator {
   static final _lettersOnlyRegex = RegExp(r'^[a-zA-Z؀-ۿ]+$');
 
   /// 3–30 English or Arabic letters, no spaces (same rule as lawmate).
-  static String? name(String? value, [String fieldName = 'Name']) {
+  static String? name(String? value, [String? fieldName]) {
+    final field = fieldName ?? _l10n.validationNameField;
     if (value == null || value.trim().isEmpty) {
-      return '$fieldName is required';
+      return _l10n.validationFieldRequired(field);
     }
     final trimmed = value.trim();
     if (trimmed.length < 3 || trimmed.length > 30) {
-      return '$fieldName must be between 3 and 30 characters';
+      return _l10n.validationFieldLength(field, 3, 30);
     }
     if (!_lettersOnlyRegex.hasMatch(trimmed)) {
-      return '$fieldName must contain letters only';
+      return _l10n.validationLettersOnly(field);
     }
     return null;
   }
@@ -116,26 +137,26 @@ class AppValidator {
   /// A real yyyy-MM-dd date in the past, at least [minimumAge] years ago.
   static String? birthdate(String? value, {int minimumAge = 20}) {
     if (value == null || value.trim().isEmpty) {
-      return 'Date of birth is required';
+      return _l10n.validationBirthdateRequired;
     }
     final trimmed = value.trim();
     if (!_dateRegex.hasMatch(trimmed)) {
-      return 'Please enter a valid date of birth';
+      return _l10n.validationBirthdateInvalid;
     }
     final parts = trimmed.split('-').map(int.parse).toList();
     final date = DateTime(parts[0], parts[1], parts[2]);
     // DateTime rolls invalid dates over (e.g. Feb 30 → Mar 2).
     if (parts[0] < 1900 || date.month != parts[1] || date.day != parts[2]) {
-      return 'Please enter a valid date of birth';
+      return _l10n.validationBirthdateInvalid;
     }
 
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
     if (!date.isBefore(today)) {
-      return 'Date of birth can’t be today or in the future';
+      return _l10n.validationBirthdateFuture;
     }
     if (date.isAfter(DateTime(today.year - minimumAge, today.month, today.day))) {
-      return 'You must be at least $minimumAge years old';
+      return _l10n.validationMinimumAge(minimumAge);
     }
     return null;
   }
@@ -147,17 +168,23 @@ class AppValidator {
   );
 
   static String? url(String? value) {
-    if (value == null || value.trim().isEmpty) return 'URL is required';
-    if (!_urlRegex.hasMatch(value.trim())) return 'Enter a valid URL';
+    if (value == null || value.trim().isEmpty) {
+      return _l10n.validationUrlRequired;
+    }
+    if (!_urlRegex.hasMatch(value.trim())) return _l10n.validationUrlInvalid;
     return null;
   }
 
   // ──────────────────────────── Number ────────────────────────────
 
-  static String? numeric(String? value, [String fieldName = 'This field']) {
-    if (value == null || value.trim().isEmpty) return '$fieldName is required';
+  static String? numeric(String? value, [String? fieldName]) {
+    if (value == null || value.trim().isEmpty) {
+      return _requiredMessage(fieldName);
+    }
     if (double.tryParse(value.trim()) == null) {
-      return '$fieldName must be a number';
+      return fieldName == null
+          ? _l10n.validationMustBeNumber
+          : _l10n.validationFieldMustBeNumber(fieldName);
     }
     return null;
   }
@@ -166,35 +193,40 @@ class AppValidator {
     String? value, {
     required double min,
     required double max,
-    String fieldName = 'Value',
+    String? fieldName,
   }) {
-    final error = numeric(value, fieldName);
+    final field = fieldName ?? _l10n.validationValueField;
+    final error = numeric(value, field);
     if (error != null) return error;
     final number = double.parse(value!.trim());
     if (number < min || number > max) {
-      return '$fieldName must be between $min and $max';
+      return _l10n.validationFieldRange(field, min, max);
     }
     return null;
   }
 
   // ──────────────────────────── Length ────────────────────────────
 
-  static String? minLength(
-    String? value, int min, [String fieldName = 'This field',
-  ]) {
-    if (value == null || value.trim().isEmpty) return '$fieldName is required';
+  static String? minLength(String? value, int min, [String? fieldName]) {
+    if (value == null || value.trim().isEmpty) {
+      return _requiredMessage(fieldName);
+    }
     if (value.trim().length < min) {
-      return '$fieldName must be at least $min characters';
+      return fieldName == null
+          ? _l10n.validationMinLength(min)
+          : _l10n.validationFieldMinLength(fieldName, min);
     }
     return null;
   }
 
-  static String? maxLength(
-    String? value, int max, [String fieldName = 'This field',
-  ]) {
-    if (value == null || value.trim().isEmpty) return '$fieldName is required';
+  static String? maxLength(String? value, int max, [String? fieldName]) {
+    if (value == null || value.trim().isEmpty) {
+      return _requiredMessage(fieldName);
+    }
     if (value.trim().length > max) {
-      return '$fieldName must be at most $max characters';
+      return fieldName == null
+          ? _l10n.validationMaxLength(max)
+          : _l10n.validationFieldMaxLength(fieldName, max);
     }
     return null;
   }
@@ -202,9 +234,11 @@ class AppValidator {
   // ──────────────────────────── OTP / PIN ────────────────────────────
 
   static String? otp(String? value, {int length = 6}) {
-    if (value == null || value.trim().isEmpty) return 'OTP is required';
+    if (value == null || value.trim().isEmpty) {
+      return _l10n.validationOtpRequired;
+    }
     if (value.trim().length != length || int.tryParse(value.trim()) == null) {
-      return 'OTP must be $length digits';
+      return _l10n.validationOtpLength(length);
     }
     return null;
   }
@@ -215,10 +249,10 @@ class AppValidator {
 
   static String? creditCard(String? value) {
     if (value == null || value.trim().isEmpty) {
-      return 'Card number is required';
+      return _l10n.validationCardRequired;
     }
     final digits = value.replaceAll(RegExp(r'\s|-'), '');
-    if (!_cardRegex.hasMatch(digits)) return 'Enter a valid card number';
+    if (!_cardRegex.hasMatch(digits)) return _l10n.validationCardInvalid;
     return null;
   }
 
@@ -226,11 +260,11 @@ class AppValidator {
 
   static String? nationalId(String? value, {int length = 14}) {
     if (value == null || value.trim().isEmpty) {
-      return 'National ID is required';
+      return _l10n.validationNationalIdRequired;
     }
     final trimmed = value.trim();
     if (trimmed.length != length || int.tryParse(trimmed) == null) {
-      return 'National ID must be $length digits';
+      return _l10n.validationNationalIdLength(length);
     }
     return null;
   }
@@ -249,4 +283,9 @@ class AppValidator {
       return null;
     };
   }
+
+  /// "This field is required" or "{fieldName} is required".
+  static String _requiredMessage(String? fieldName) => fieldName == null
+      ? _l10n.validationRequired
+      : _l10n.validationFieldRequired(fieldName);
 }

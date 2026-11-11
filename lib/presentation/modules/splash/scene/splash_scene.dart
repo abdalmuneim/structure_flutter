@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:structure_flutter/core/bases/base_scene.dart';
+import 'package:structure_flutter/core/localization/l10n_extension.dart';
 import 'package:structure_flutter/presentation/components/utils/ui/ui.dart';
 import 'package:structure_flutter/presentation/modules/splash/providers/splash_provider.dart';
 
@@ -76,9 +77,9 @@ class _SplashSceneState extends BaseSceneState<SplashProvider> {
                   ),
                   const SizedBox(height: 28),
                   // App name
-                  const Text(
-                    'VCare',
-                    style: TextStyle(
+                  Text(
+                    context.l10n.appTitle,
+                    style: const TextStyle(
                       fontSize: 36,
                       fontWeight: FontWeight.bold,
                       color: AppColors.white,
@@ -88,7 +89,7 @@ class _SplashSceneState extends BaseSceneState<SplashProvider> {
                   const SizedBox(height: 10),
                   // Tagline
                   Text(
-                    'Your Health, Our Priority',
+                    context.l10n.splashTagline,
                     style: TextStyle(
                       fontSize: 16,
                       color: Colors.white.withValues(alpha: 0.7),

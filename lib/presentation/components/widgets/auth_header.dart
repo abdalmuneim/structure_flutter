@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:structure_flutter/core/localization/l10n_extension.dart';
 import 'package:structure_flutter/presentation/components/utils/ui/ui.dart';
 import 'package:structure_flutter/presentation/components/widgets/language_switcher.dart';
 
@@ -49,7 +50,7 @@ class AuthHeader extends StatelessWidget {
                 else
                   IconButton(
                     onPressed: onBack,
-                    tooltip: 'Back',
+                    tooltip: context.l10n.commonBack,
                     icon: const Icon(Icons.arrow_back, color: AppColors.white),
                   ),
                 const Spacer(),

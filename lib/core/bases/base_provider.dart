@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:structure_flutter/core/bases/ui_effect.dart';
+import 'package:structure_flutter/core/localization/api_error_message.dart';
 import 'package:structure_flutter/core/networking/api_result.dart';
 
 /// Base class for every screen provider.
@@ -73,7 +74,7 @@ class BaseProvider extends ChangeNotifier {
       case Success<R>(:final data):
         await onSuccess(data);
       case Failure<R>(:final errorHandler):
-        showError(errorHandler.apiErrorModel.message ?? 'An error occurred');
+        showError(localizedApiMessage(errorHandler.apiErrorModel.message));
     }
   }
 

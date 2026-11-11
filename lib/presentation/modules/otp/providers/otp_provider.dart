@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:structure_flutter/core/bases/base_provider.dart';
 import 'package:structure_flutter/core/bases/base_use_case.dart';
+import 'package:structure_flutter/core/localization/app_l10n.dart';
 import 'package:structure_flutter/core/routing/route_path.dart';
 import 'package:structure_flutter/domain/use_cases/login_use_case.dart';
 import 'package:structure_flutter/domain/use_cases/resend_otp_use_case.dart';
@@ -67,7 +68,7 @@ class OtpProvider extends BaseProvider {
       () => _resendOtpUseCase(const NoParams()),
       onSuccess: (_) {
         codeController.clear();
-        showSuccess('OTP sent again');
+        showSuccess(AppL10n.current.otpResent);
         _startCountdown();
       },
     );

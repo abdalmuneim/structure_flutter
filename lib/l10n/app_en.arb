@@ -26,5 +26,331 @@
   "settingsChooseLanguage": "Choose language",
   "@settingsChooseLanguage": {
     "description": "Title of the bottom sheet that lists the available languages."
+  },
+
+  "commonNext": "Next",
+  "@commonNext": {
+    "description": "Button that moves to the next page/step."
+  },
+  "commonGetStarted": "Get Started",
+  "@commonGetStarted": {
+    "description": "Call-to-action button that starts using the app (last onboarding page, phone screen)."
+  },
+
+  "splashTagline": "Your Health, Our Priority",
+  "@splashTagline": {
+    "description": "Slogan under the logo on the splash screen."
+  },
+
+  "onboardingSkip": "Skip",
+  "@onboardingSkip": {
+    "description": "Skips the onboarding pages and goes to sign in."
+  },
+  "onboardingPageIndicator": "{current}/{total}",
+  "@onboardingPageIndicator": {
+    "description": "Onboarding page counter under the dots, e.g. 1/3 = page 1 of 3.",
+    "placeholders": {
+      "current": {"type": "int", "format": "decimalPattern"},
+      "total": {"type": "int", "format": "decimalPattern"}
+    }
+  },
+  "onboardingWelcomeTitle": "Welcome to VCare",
+  "onboardingWelcomeDescription": "Your health is our priority. Get access to top doctors and medical services.",
+  "onboardingBookTitle": "Book Appointments",
+  "onboardingBookDescription": "Schedule appointments with specialists easily and quickly.",
+  "onboardingStartTitle": "Get Started",
+  "@onboardingStartTitle": {
+    "description": "Title of the last onboarding page (not the button)."
+  },
+  "onboardingStartDescription": "Create your account and start your health journey today.",
+
+  "authLoginTitle": "Let’s Sign In",
+  "authLoginSubtitle": "Enter your phone number to get started",
+  "authPhoneLabel": "Phone Number",
+  "@authPhoneLabel": {
+    "description": "Label above the mobile phone number field."
+  },
+  "authLoginNewUserHint": "New here? You will create your account in the next step.",
+  "@authLoginNewUserHint": {
+    "description": "Under the phone field: the same screen is used to sign in and to sign up."
+  },
+
+  "commonContinue": "Continue",
+  "@commonContinue": {
+    "description": "Primary button that submits the current form/step."
+  },
+  "commonOk": "OK",
+  "@commonOk": {
+    "description": "Button that closes a message dialog."
+  },
+  "commonGotIt": "GOT IT",
+  "@commonGotIt": {
+    "description": "Button that dismisses an information/alert dialog."
+  },
+  "commonBack": "Back",
+  "@commonBack": {
+    "description": "Tooltip of the back arrow button."
+  },
+  "commonEdit": "Edit",
+  "@commonEdit": {
+    "description": "Small action inside a text field that makes it editable."
+  },
+  "commonSearch": "Search",
+  "@commonSearch": {
+    "description": "Label of the search box in a drop-down list."
+  },
+  "commonSearchHint": "Search...",
+  "@commonSearchHint": {
+    "description": "Placeholder of the search box in a drop-down list."
+  },
+  "commonNoDataFound": "No data found",
+  "@commonNoDataFound": {
+    "description": "Shown when a list or search has no results."
+  },
+
+  "registerTitle": "Sign Up For Free",
+  "registerSubtitle": "Create your account for {phone}",
+  "@registerSubtitle": {
+    "placeholders": {
+      "phone": {"type": "String", "example": "+201012345678"}
+    }
+  },
+  "registerSuccessTitle": "Sign Up Successful!",
+  "registerSuccessSubtitle": "Your account for {phone} is ready",
+  "@registerSuccessSubtitle": {
+    "placeholders": {
+      "phone": {"type": "String", "example": "+201012345678"}
+    }
+  },
+  "registerFirstNameLabel": "First Name *",
+  "@registerFirstNameLabel": {
+    "description": "Form label; the * marks a required field."
+  },
+  "registerFirstNameField": "First Name",
+  "@registerFirstNameField": {
+    "description": "Field name inserted into validation errors, e.g. \"First Name is required\"."
+  },
+  "registerLastNameLabel": "Last Name *",
+  "@registerLastNameLabel": {
+    "description": "Form label for the family name; the * marks a required field."
+  },
+  "registerLastNameField": "Last Name",
+  "@registerLastNameField": {
+    "description": "Field name inserted into validation errors, e.g. \"Last Name is required\"."
+  },
+  "registerEmailLabel": "Email Address *",
+  "registerBirthdateLabel": "Date of Birth *",
+  "registerGenderLabel": "Gender *",
+  "registerGenderMale": "Male",
+  "registerGenderFemale": "Female",
+  "registerGenderRequired": "Gender required",
+  "@registerGenderRequired": {
+    "description": "Error under the gender choice when none is picked."
+  },
+  "registerAcceptTerms": "I accept the Terms & Conditions",
+  "registerTermsRequired": "You must accept the terms and conditions to proceed",
+  "registerSuccessMessage": "You have successfully created your account. Confirm your phone number with the code we send you to continue.",
+  "registerVerifyPhone": "Verify Phone Number",
+  "@registerVerifyPhone": {
+    "description": "Button that opens the SMS code screen to confirm the phone number."
+  },
+
+  "otpTitle": "{count, plural, =1{Enter 1 digit OTP Code} other{Enter {count} digit OTP Code}}",
+  "@otpTitle": {
+    "description": "Title of the screen where the user types the code received by SMS (OTP = one-time password).",
+    "placeholders": {
+      "count": {"type": "int", "format": "decimalPattern"}
+    }
+  },
+  "otpSubtitle": "We sent a code to {phone}",
+  "@otpSubtitle": {
+    "placeholders": {
+      "phone": {"type": "String", "example": "+201012345678"}
+    }
+  },
+  "otpResendCountdown": "You can send again after {time}",
+  "@otpResendCountdown": {
+    "description": "Shown while the code can't be resent yet; time is a mm:ss countdown.",
+    "placeholders": {
+      "time": {"type": "String", "example": "00:59"}
+    }
+  },
+  "otpDidNotReceive": "Didn’t receive the code?",
+  "otpResend": "Resend OTP",
+  "@otpResend": {
+    "description": "Button that sends a new SMS code."
+  },
+  "otpResent": "OTP sent again",
+  "@otpResent": {
+    "description": "Confirmation toast after a new SMS code was sent."
+  },
+
+  "mainTabHome": "Home",
+  "@mainTabHome": {
+    "description": "Bottom bar tab and screen title. Keep short: 4 tabs share the bar."
+  },
+  "mainTabNotifications": "Notifications",
+  "@mainTabNotifications": {
+    "description": "Bottom bar tab and screen title. Keep short: 4 tabs share the bar."
+  },
+  "mainTabProfile": "Profile",
+  "@mainTabProfile": {
+    "description": "Bottom bar tab and screen title for the user's own account. Keep short: 4 tabs share the bar."
+  },
+  "mainTabSettings": "Settings",
+  "@mainTabSettings": {
+    "description": "Bottom bar tab and screen title. Keep short: 4 tabs share the bar."
+  },
+
+  "homeEmptyTitle": "Your home feed",
+  "homeEmptyMessage": "Content for the home screen will appear here.",
+  "notificationsEmptyTitle": "No notifications yet",
+  "notificationsEmptyMessage": "We will let you know when something arrives.",
+  "profileEmptyTitle": "Your profile",
+  "profileEmptyMessage": "Your account details will appear here.",
+  "settingsEmptyTitle": "App settings",
+  "settingsEmptyMessage": "Settings options will appear here.",
+
+  "errorNoContent": "There's nothing to show here yet.",
+  "@errorNoContent": {
+    "description": "The server answered successfully but sent no data."
+  },
+  "errorBadRequest": "We couldn't process this request. Please check your details and try again.",
+  "errorForbidden": "You don't have permission to do this.",
+  "errorUnauthorized": "Your session has expired. Please sign in again.",
+  "errorNotFound": "We couldn't find what you were looking for.",
+  "errorConflict": "This conflicts with existing data.",
+  "errorInternalServer": "Something went wrong on our side. Please try again later.",
+  "errorUnknown": "An unknown error occurred.",
+  "errorTimeout": "The connection timed out. Please try again.",
+  "errorDefault": "Something went wrong. Please try again.",
+  "@errorDefault": {
+    "description": "Generic error when nothing more specific is known."
+  },
+  "errorCache": "We couldn't load the saved data.",
+  "errorNoInternet": "No internet connection. Please check your connection and try again.",
+
+  "validationRequired": "This field is required",
+  "@validationRequired": {
+    "description": "Form error for an empty required field whose name isn't given."
+  },
+  "validationFieldRequired": "{fieldName} is required",
+  "@validationFieldRequired": {
+    "description": "Form error for an empty required field.",
+    "placeholders": {
+      "fieldName": {"type": "String", "example": "First Name"}
+    }
+  },
+  "validationNameField": "Name",
+  "@validationNameField": {
+    "description": "Default field name used in name validation errors."
+  },
+  "validationValueField": "Value",
+  "@validationValueField": {
+    "description": "Default field name used in number-range validation errors."
+  },
+  "validationEmailRequired": "Email is required",
+  "validationEmailInvalid": "Enter a valid email",
+  "validationPasswordRequired": "Password is required",
+  "validationPasswordMinLength": "{count, plural, =1{Password must be at least 1 character} other{Password must be at least {count} characters}}",
+  "@validationPasswordMinLength": {
+    "placeholders": {
+      "count": {"type": "int", "format": "decimalPattern"}
+    }
+  },
+  "validationPasswordsMismatch": "Passwords do not match",
+  "validationPasswordWeak": "Must include uppercase, lowercase, number, and special character",
+  "@validationPasswordWeak": {
+    "description": "Password strength error: it needs an uppercase letter, a lowercase letter, a digit and a symbol."
+  },
+  "validationPhoneRequired": "Phone number is required",
+  "validationPhoneInvalid": "Enter a valid phone number",
+  "validationUsernameRequired": "Username is required",
+  "validationUsernameInvalid": "Username must be 3-30 chars (letters, numbers, . or _)",
+  "validationFieldLength": "{max, plural, other{{fieldName} must be between {min} and {max} characters}}",
+  "@validationFieldLength": {
+    "description": "Form error when a field's length is outside a range. Pluralised on the maximum for languages that need it.",
+    "placeholders": {
+      "fieldName": {"type": "String", "example": "First Name"},
+      "min": {"type": "int", "format": "decimalPattern"},
+      "max": {"type": "int", "format": "decimalPattern"}
+    }
+  },
+  "validationLettersOnly": "{fieldName} must contain letters only",
+  "@validationLettersOnly": {
+    "placeholders": {
+      "fieldName": {"type": "String", "example": "First Name"}
+    }
+  },
+  "validationBirthdateRequired": "Date of birth is required",
+  "validationBirthdateInvalid": "Please enter a valid date of birth",
+  "validationBirthdateFuture": "Date of birth can’t be today or in the future",
+  "validationMinimumAge": "{age, plural, =1{You must be at least 1 year old} other{You must be at least {age} years old}}",
+  "@validationMinimumAge": {
+    "placeholders": {
+      "age": {"type": "int", "format": "decimalPattern"}
+    }
+  },
+  "validationUrlRequired": "URL is required",
+  "validationUrlInvalid": "Enter a valid URL",
+  "validationMustBeNumber": "This field must be a number",
+  "validationFieldMustBeNumber": "{fieldName} must be a number",
+  "@validationFieldMustBeNumber": {
+    "placeholders": {
+      "fieldName": {"type": "String", "example": "Age"}
+    }
+  },
+  "validationFieldRange": "{fieldName} must be between {min} and {max}",
+  "@validationFieldRange": {
+    "placeholders": {
+      "fieldName": {"type": "String", "example": "Age"},
+      "min": {"type": "num", "format": "decimalPattern"},
+      "max": {"type": "num", "format": "decimalPattern"}
+    }
+  },
+  "validationMinLength": "{count, plural, =1{This field must be at least 1 character} other{This field must be at least {count} characters}}",
+  "@validationMinLength": {
+    "placeholders": {
+      "count": {"type": "int", "format": "decimalPattern"}
+    }
+  },
+  "validationFieldMinLength": "{count, plural, =1{{fieldName} must be at least 1 character} other{{fieldName} must be at least {count} characters}}",
+  "@validationFieldMinLength": {
+    "placeholders": {
+      "fieldName": {"type": "String", "example": "Bio"},
+      "count": {"type": "int", "format": "decimalPattern"}
+    }
+  },
+  "validationMaxLength": "{count, plural, =1{This field must be at most 1 character} other{This field must be at most {count} characters}}",
+  "@validationMaxLength": {
+    "placeholders": {
+      "count": {"type": "int", "format": "decimalPattern"}
+    }
+  },
+  "validationFieldMaxLength": "{count, plural, =1{{fieldName} must be at most 1 character} other{{fieldName} must be at most {count} characters}}",
+  "@validationFieldMaxLength": {
+    "placeholders": {
+      "fieldName": {"type": "String", "example": "Bio"},
+      "count": {"type": "int", "format": "decimalPattern"}
+    }
+  },
+  "validationOtpRequired": "OTP is required",
+  "@validationOtpRequired": {
+    "description": "OTP = the one-time verification code sent by SMS."
+  },
+  "validationOtpLength": "{count, plural, =1{OTP must be 1 digit} other{OTP must be {count} digits}}",
+  "@validationOtpLength": {
+    "placeholders": {
+      "count": {"type": "int", "format": "decimalPattern"}
+    }
+  },
+  "validationCardRequired": "Card number is required",
+  "validationCardInvalid": "Enter a valid card number",
+  "validationNationalIdRequired": "National ID is required",
+  "validationNationalIdLength": "{count, plural, =1{National ID must be 1 digit} other{National ID must be {count} digits}}",
+  "@validationNationalIdLength": {
+    "placeholders": {
+      "count": {"type": "int", "format": "decimalPattern"}
+    }
   }
 }

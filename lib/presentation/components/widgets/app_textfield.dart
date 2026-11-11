@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:structure_flutter/core/helpers/constants.dart';
+import 'package:structure_flutter/core/localization/l10n_extension.dart';
 
 import 'package:structure_flutter/presentation/components/extensions/widget_extension.dart';
 import 'package:structure_flutter/presentation/components/utils/ui/ui.dart';
@@ -236,7 +237,7 @@ class _AppTextFieldState extends State<AppTextField> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Text(
-                                "edit",
+                                context.l10n.commonEdit,
                                 style: const TextStyle(
                                   color: AppColors.primary,
                                   fontWeight: FontWeight.w200,

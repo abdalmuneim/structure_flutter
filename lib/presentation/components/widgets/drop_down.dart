@@ -1,5 +1,7 @@
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
+import 'package:structure_flutter/core/localization/app_l10n.dart';
+import 'package:structure_flutter/core/localization/l10n_extension.dart';
 import 'package:structure_flutter/presentation/components/utils/ui/ui.dart';
 import 'package:structure_flutter/presentation/components/widgets/outline_input_border.dart';
 
@@ -65,7 +67,10 @@ Widget dropDown<T>({
                     ),
                     searchFieldProps: TextFieldProps(
                       padding: const EdgeInsets.all(15),
-                      decoration: dropDownLabelDecoration("search", isRequired),
+                      decoration: dropDownLabelDecoration(
+                        AppL10n.current.commonSearch,
+                        isRequired,
+                      ),
                       style: const TextStyle(color: AppColors.secondary),
                     ),
                     showSearchBox: showSearchBox,
@@ -74,7 +79,7 @@ Widget dropDown<T>({
                     emptyBuilder: (context, data) {
                       return Center(
                         child: Text(
-                          "no_data_found",
+                          context.l10n.commonNoDataFound,
                           style: const TextStyle(color: AppColors.secondary),
                         ),
                       );
@@ -163,7 +168,7 @@ Widget dropDown<T>({
                     searchFieldProps: TextFieldProps(
                       padding: const EdgeInsets.all(15),
                       decoration: dropDownLabelDecoration(
-                        "search...",
+                        AppL10n.current.commonSearchHint,
                         isRequired,
                       ),
                       style: const TextStyle(color: AppColors.secondary),
@@ -174,7 +179,7 @@ Widget dropDown<T>({
                     emptyBuilder: (context, data) {
                       return Center(
                         child: Text(
-                          "no_data_found",
+                          context.l10n.commonNoDataFound,
                           style: const TextStyle(color: AppColors.secondary),
                         ),
                       );

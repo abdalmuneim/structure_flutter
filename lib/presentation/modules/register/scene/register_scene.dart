@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:structure_flutter/core/bases/base_scene.dart';
 import 'package:structure_flutter/core/helpers/app_validator.dart';
+import 'package:structure_flutter/core/localization/l10n_extension.dart';
 import 'package:structure_flutter/presentation/components/utils/ui/ui.dart';
 import 'package:structure_flutter/presentation/components/widgets/app_button.dart';
 import 'package:structure_flutter/presentation/components/widgets/app_textfield.dart';
@@ -23,10 +24,12 @@ class _RegisterSceneState extends BaseSceneState<RegisterProvider> {
         child: Column(
           children: [
             AuthHeader(
-              title: p.accountCreated ? 'Sign Up Successful!' : 'Sign Up For Free',
+              title: p.accountCreated
+                  ? context.l10n.registerSuccessTitle
+                  : context.l10n.registerTitle,
               subtitle: p.accountCreated
-                  ? 'Your account for ${p.phone} is ready'
-                  : 'Create your account for ${p.phone}',
+                  ? context.l10n.registerSuccessSubtitle(p.phone)
+                  : context.l10n.registerSubtitle(p.phone),
               onBack: p.accountCreated ? null : () => navigator.maybePop(),
             ),
             Padding(
@@ -40,6 +43,7 @@ class _RegisterSceneState extends BaseSceneState<RegisterProvider> {
   }
 
   Widget _form(RegisterProvider p) {
+    final l10n = context.l10n;
     return Form(
       key: p.formKey,
       child: Column(
@@ -47,26 +51,28 @@ class _RegisterSceneState extends BaseSceneState<RegisterProvider> {
         children: [
           const SizedBox(height: 8),
           AppTextField(
-            title: 'First Name *',
+            title: l10n.registerFirstNameLabel,
             controller: p.firstNameController,
-            validator: (value) => AppValidator.name(value, 'First Name'),
+            validator: (value) =>
+                AppValidator.name(value, l10n.registerFirstNameField),
           ),
           const SizedBox(height: 16),
           AppTextField(
-            title: 'Last Name *',
+            title: l10n.registerLastNameLabel,
             controller: p.lastNameController,
-            validator: (value) => AppValidator.name(value, 'Last Name'),
+            validator: (value) =>
+                AppValidator.name(value, l10n.registerLastNameField),
           ),
           const SizedBox(height: 16),
           AppTextField(
-            title: 'Email Address *',
+            title: l10n.registerEmailLabel,
             controller: p.emailController,
             keyboardType: TextInputType.emailAddress,
             validator: AppValidator.email,
           ),
           const SizedBox(height: 16),
           AppTextField(
-            title: 'Date of Birth *',
+            title: l10n.registerBirthdateLabel,
             hint: 'yyyy-mm-dd',
             controller: p.birthdateController,
             readOnly: true,
@@ -75,16 +81,20 @@ class _RegisterSceneState extends BaseSceneState<RegisterProvider> {
             validator: (value) => AppValidator.birthdate(value),
           ),
           const SizedBox(height: 16),
-          const Text(
-            'Gender *',
-            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+          Text(
+            l10n.registerGenderLabel,
+            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
           ),
           const SizedBox(height: 8),
           Row(
             children: [
               for (final gender in RegisterProvider.genders) ...[
                 ChoiceChip(
-                  label: Text(gender == 'male' ? 'Male' : 'Female'),
+                  label: Text(
+                    gender == 'male'
+                        ? l10n.registerGenderMale
+                        : l10n.registerGenderFemale,
+                  ),
                   selected: p.gender == gender,
                   onSelected: (_) => p.selectGender(gender),
                   selectedColor: AppColors.primary.withValues(alpha: 0.15),
@@ -93,7 +103,7 @@ class _RegisterSceneState extends BaseSceneState<RegisterProvider> {
               ],
             ],
           ),
-          if (p.showGenderError) inputError('Gender required'),
+          if (p.showGenderError) inputError(l10n.registerGenderRequired),
           const SizedBox(height: 16),
           Row(
             children: [
@@ -102,10 +112,10 @@ class _RegisterSceneState extends BaseSceneState<RegisterProvider> {
                 activeColor: AppColors.primary,
                 onChanged: (value) => p.setTermsAccepted(value ?? false),
               ),
-              const Expanded(
+              Expanded(
                 child: Text(
-                  'I accept the Terms & Conditions',
-                  style: TextStyle(
+                  l10n.registerAcceptTerms,
+                  style: const TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
                     color: AppColors.primary,
@@ -116,7 +126,7 @@ class _RegisterSceneState extends BaseSceneState<RegisterProvider> {
           ),
           const SizedBox(height: 28),
           AppButton(
-            title: 'Continue',
+            title: l10n.commonContinue,
             gradient: true,
             shadow: true,
             onPressed: p.register,
@@ -137,14 +147,13 @@ class _RegisterSceneState extends BaseSceneState<RegisterProvider> {
         const Icon(Icons.check_circle, size: 72, color: AppColors.success),
         const SizedBox(height: 16),
         Text(
-          'You have successfully created your account. '
-          'Confirm your phone number with the code we send you to continue.',
+          context.l10n.registerSuccessMessage,
           textAlign: TextAlign.center,
           style: TextStyle(fontSize: 15, color: Colors.grey[700], height: 1.4),
         ),
         const SizedBox(height: 32),
         AppButton(
-          title: 'Verify Phone Number',
+          title: context.l10n.registerVerifyPhone,
           gradient: true,
           shadow: true,
           onPressed: p.continueToVerification,

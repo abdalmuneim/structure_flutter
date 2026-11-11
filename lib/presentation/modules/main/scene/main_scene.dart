@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:structure_flutter/core/bases/base_scene.dart';
+import 'package:structure_flutter/core/localization/l10n_extension.dart';
 import 'package:structure_flutter/presentation/components/utils/ui/ui.dart';
 import 'package:structure_flutter/presentation/modules/home/scene/home_scene.dart';
 import 'package:structure_flutter/presentation/modules/main/models/main_tab.dart';
@@ -48,25 +49,25 @@ class _MainSceneState extends BaseSceneState<MainProvider> {
   };
 
   BottomNavigationBarItem _itemFor(MainTab tab) => switch (tab) {
-    MainTab.home => const BottomNavigationBarItem(
-      icon: Icon(Icons.home_outlined),
-      activeIcon: Icon(Icons.home),
-      label: 'Home',
+    MainTab.home => BottomNavigationBarItem(
+      icon: const Icon(Icons.home_outlined),
+      activeIcon: const Icon(Icons.home),
+      label: context.l10n.mainTabHome,
     ),
-    MainTab.notifications => const BottomNavigationBarItem(
-      icon: Icon(Icons.notifications_outlined),
-      activeIcon: Icon(Icons.notifications),
-      label: 'Notifications',
+    MainTab.notifications => BottomNavigationBarItem(
+      icon: const Icon(Icons.notifications_outlined),
+      activeIcon: const Icon(Icons.notifications),
+      label: context.l10n.mainTabNotifications,
     ),
-    MainTab.profile => const BottomNavigationBarItem(
-      icon: Icon(Icons.person_outline),
-      activeIcon: Icon(Icons.person),
-      label: 'Profile',
+    MainTab.profile => BottomNavigationBarItem(
+      icon: const Icon(Icons.person_outline),
+      activeIcon: const Icon(Icons.person),
+      label: context.l10n.mainTabProfile,
     ),
-    MainTab.settings => const BottomNavigationBarItem(
-      icon: Icon(Icons.settings_outlined),
-      activeIcon: Icon(Icons.settings),
-      label: 'Settings',
+    MainTab.settings => BottomNavigationBarItem(
+      icon: const Icon(Icons.settings_outlined),
+      activeIcon: const Icon(Icons.settings),
+      label: context.l10n.mainTabSettings,
     ),
   };
 }

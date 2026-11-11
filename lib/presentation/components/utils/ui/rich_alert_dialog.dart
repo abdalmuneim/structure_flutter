@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:structure_flutter/core/localization/l10n_extension.dart';
 import 'package:structure_flutter/presentation/components/widgets/app_button.dart';
 import '../../extensions/builder_extension.dart';
 
@@ -155,7 +156,11 @@ class _RichAlertDialogState extends State<RichAlertDialog> {
   Container _defaultAction(BuildContext context) {
     return Container(
       alignment: Alignment.center,
-      child: AppButton(minWidth: 200, onPressed: () => pop(), title: "GOT IT"),
+      child: AppButton(
+        minWidth: 200,
+        onPressed: () => pop(),
+        title: context.l10n.commonGotIt,
+      ),
     );
   }
 }
