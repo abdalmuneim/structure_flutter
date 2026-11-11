@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:structure_flutter/core/bases/base_provider.dart';
 import 'package:structure_flutter/core/helpers/shared_pref_helper.dart';
 import 'package:structure_flutter/core/networking/api_result.dart';
-import 'package:structure_flutter/core/networking/dio_factory.dart';
 import 'package:structure_flutter/core/routing/route_path.dart';
 import 'package:structure_flutter/presentaions/modules/login/models/login_form.dart';
 import 'package:structure_flutter/presentaions/modules/login/models/login_request.dart';
@@ -74,7 +73,6 @@ class LoginProvider extends BaseProvider {
         SharedPrefKeys.userToken,
         response.token!,
       );
-      DioFactory.setTokenIntoHeaderAfterLogin(response.token!);
     }
 
     navigator.pushNamedAndRemoveUntil(RoutePath.main, (route) => false);

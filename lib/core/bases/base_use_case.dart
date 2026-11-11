@@ -34,10 +34,17 @@ abstract class BaseUseCase<Params, Result> {
     } catch (error) {
       final handler = ErrorHandler.handle(error);
 
-      if (handleError != null) {
-        handleError(handler);
-      } else {
-        await _handleByCode(handler);
+      try {
+        if (handleError != null) {
+          handleError(handler);
+        } else {
+          await _handleByCode(handler);
+        }
+      } catch (sideEffectError) {
+        // A failing side effect (custom callback, clearing storage on 401)
+        // must not stop us from returning a Failure, or the caller never
+        // gets to turn its loading state off.
+        debugPrint('networkRequest: error handling failed: $sideEffectError');
       }
 
       return ApiResult.failure(handler);

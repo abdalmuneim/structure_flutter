@@ -139,11 +139,14 @@ class ErrorHandler implements Exception {
   late ApiErrorModel apiErrorModel;
 
   ErrorHandler.handle(dynamic error) {
-    if (error is DioException) {
-      // dio error so its an error from response of the API or from dio itself
-      apiErrorModel = _handleError(error);
-    } else {
-      // default error
+    try {
+      apiErrorModel = error is DioException
+          // dio error so its an error from response of the API or from dio itself
+          ? _handleError(error)
+          : DataSource.defaultError.getFailure();
+    } catch (_) {
+      // Building the error must never throw: callers rely on getting a
+      // Failure back so they can turn their loading state off.
       apiErrorModel = DataSource.defaultError.getFailure();
     }
   }
@@ -158,29 +161,47 @@ ApiErrorModel _handleError(DioException error) {
     case DioExceptionType.receiveTimeout:
       return DataSource.recieveTimeout.getFailure();
     case DioExceptionType.badResponse:
-      if (error.response != null &&
-          error.response?.statusCode != null &&
-          error.response?.statusMessage != null) {
-        return ApiErrorModel.fromJson(error.response!.data);
-      } else {
-        return DataSource.defaultError.getFailure();
-      }
     case DioExceptionType.unknown:
-      if (error.response != null &&
-          error.response?.statusCode != null &&
-          error.response?.statusMessage != null) {
-        return ApiErrorModel.fromJson(error.response!.data);
-      } else {
-        return DataSource.defaultError.getFailure();
-      }
+      return _fromResponse(error.response);
     case DioExceptionType.cancel:
       return DataSource.cancel.getFailure();
     case DioExceptionType.connectionError:
-      return DataSource.defaultError.getFailure();
+      return DataSource.noInternetConnection.getFailure();
     case DioExceptionType.badCertificate:
       return DataSource.defaultError.getFailure();
   }
 }
+
+/// Builds the error for a failed HTTP response.
+///
+/// [ApiErrorModel.code] is the HTTP status code, so checks such as 401 work
+/// even when the body has no `code` field. The server's `message` is used
+/// when the body is a JSON object that has one; for anything else (HTML error
+/// pages, plain text, empty body) a generic message for the status is used.
+ApiErrorModel _fromResponse(Response? response) {
+  final statusCode = response?.statusCode;
+  final fallback = _dataSourceForStatus(statusCode).getFailure();
+
+  final body = response?.data;
+  final bodyMessage = body is Map ? body['message'] : null;
+  final bodyCode = body is Map ? body['code'] : null;
+
+  return ApiErrorModel(
+    message: bodyMessage is String && bodyMessage.isNotEmpty
+        ? bodyMessage
+        : fallback.message,
+    code: statusCode ?? (bodyCode is int ? bodyCode : fallback.code),
+  );
+}
+
+DataSource _dataSourceForStatus(int? statusCode) => switch (statusCode) {
+  ResponseCode.badRequest => DataSource.badRequest,
+  ResponseCode.unauthorised => DataSource.unauthorised,
+  ResponseCode.forbidden => DataSource.forbidden,
+  ResponseCode.notFound => DataSource.notFound,
+  ResponseCode.internalServerError => DataSource.internalServerError,
+  _ => DataSource.defaultError,
+};
 
 class ApiInternalStatus {
   static const int success = 0;

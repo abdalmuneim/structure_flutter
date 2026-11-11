@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:structure_flutter/core/bases/base_provider.dart';
 import 'package:structure_flutter/core/helpers/shared_pref_helper.dart';
-import 'package:structure_flutter/core/networking/dio_factory.dart';
 import 'package:structure_flutter/core/routing/route_path.dart';
 
 class SplashProvider extends BaseProvider {
@@ -27,7 +26,6 @@ class SplashProvider extends BaseProvider {
     );
 
     if (token != null && token.toString().isNotEmpty) {
-      DioFactory.setTokenIntoHeaderAfterLogin(token);
       navigator.pushNamedAndRemoveUntil(RoutePath.main, (route) => false);
     } else {
       navigator.pushNamedAndRemoveUntil(RoutePath.login, (route) => false);
