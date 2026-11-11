@@ -17,15 +17,21 @@ enum TransitionType {
 }
 
 class RouteTransition {
-  // routeArgs is not required anymore; builders can access arguments via ModalRoute
+  /// Builds a route with the given [transition].
+  ///
+  /// [settings] must be the `RouteSettings` that `onGenerateRoute` received.
+  /// It gives the route its name and arguments, so [builder] gets the
+  /// arguments and screens can read `ModalRoute.of(context)!.settings`.
   static Route<dynamic> generateRoute({
-    required Widget Function(BuildContext, dynamic) builder,
+    required RouteSettings settings,
+    required Widget Function(BuildContext context, Object? arguments) builder,
     TransitionType transition = TransitionType.defaultTransition,
     Duration duration = const Duration(milliseconds: 300),
   }) {
     return PageRouteBuilder(
+      settings: settings,
       pageBuilder: (context, animation, secondaryAnimation) =>
-          builder(context, ModalRoute.of(context)?.settings.arguments),
+          builder(context, settings.arguments),
       transitionDuration: duration,
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         switch (transition) {

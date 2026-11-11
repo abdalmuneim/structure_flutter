@@ -1,30 +1,33 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:structure_flutter/core/bases/base_provider.dart';
-import 'package:structure_flutter/presentaions/components/extensions/alerts_extension.dart';
+import 'package:structure_flutter/core/bases/ui_effect.dart';
+import 'package:structure_flutter/presentation/components/extensions/alerts_extension.dart';
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-//  BaseScene — for scenes WITHOUT a form model
+//  BaseScene — a screen backed by a BaseProvider
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-abstract class BaseScene<T extends BaseProvider, D> extends StatefulWidget {
+abstract class BaseScene<T extends BaseProvider> extends StatefulWidget {
   const BaseScene({super.key});
 
   @override
-  BaseSceneState<T, D> createState();
+  BaseSceneState<T> createState();
 }
 
-abstract class BaseSceneState<T extends BaseProvider, D>
-    extends State<BaseScene<T, D>>
+abstract class BaseSceneState<T extends BaseProvider>
+    extends State<BaseScene<T>>
     with WidgetsBindingObserver {
   // ── Subclass API ──────────────────────────────────────────────
 
-  /// Build the screen UI. Called only on render-data changes.
+  /// Build the screen UI. Called when the provider calls `notifyListeners()`.
   Widget buildWidget(BuildContext context, T provider);
 
-  /// Handle custom non-render side-effects that the base doesn't cover.
-  /// Loading / error / success are already handled automatically.
-  void listenToState(BuildContext context, T provider) {}
+  /// Handle feature-specific effects. Loading, error, success and
+  /// navigation effects are already handled by the base.
+  void onEffect(BuildContext context, UiEffect effect) {}
 
   /// Runs once after the first frame (e.g. initial API call).
   void afterFirstFrame() {}
@@ -43,12 +46,10 @@ abstract class BaseSceneState<T extends BaseProvider, D>
   NavigatorState get navigator => Navigator.of(context);
   ThemeData get theme => Theme.of(context);
 
-  // ── Non-render state tracking ─────────────────────────────────
+  // ── Effect subscription ───────────────────────────────────────
 
   T? _provider;
-  bool _wasLoading = false;
-  bool _hadError = false;
-  bool _hadSuccess = false;
+  StreamSubscription<UiEffect>? _effectSubscription;
   bool _isLoadingDialogOpen = false;
 
   // ── Lifecycle ─────────────────────────────────────────────────
@@ -65,15 +66,15 @@ abstract class BaseSceneState<T extends BaseProvider, D>
     super.didChangeDependencies();
     final newProvider = context.read<T>();
     if (_provider != newProvider) {
-      _provider?.removeListener(_onProviderChanged);
+      _effectSubscription?.cancel();
       _provider = newProvider;
-      _provider!.addListener(_onProviderChanged);
+      _effectSubscription = newProvider.effects.listen(_handleEffect);
     }
   }
 
   @override
   void dispose() {
-    _provider?.removeListener(_onProviderChanged);
+    _effectSubscription?.cancel();
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
@@ -107,36 +108,35 @@ abstract class BaseSceneState<T extends BaseProvider, D>
     );
   }
 
-  // ── Non-render listener ───────────────────────────────────────
+  // ── Effects ───────────────────────────────────────────────────
 
-  void _onProviderChanged() {
-    final p = _provider;
-    if (p == null || !mounted) return;
+  void _handleEffect(UiEffect effect) {
+    if (!mounted) return;
 
-    // Loading
-    if (p.isLoading && !_wasLoading) {
-      _showLoadingDialog();
-    } else if (!p.isLoading && _wasLoading) {
-      _hideLoadingDialog();
+    switch (effect) {
+      case ShowLoadingEffect():
+        _showLoadingDialog();
+      case HideLoadingEffect():
+        _hideLoadingDialog();
+      case ShowErrorEffect(:final message):
+        showError(message);
+      case ShowSuccessEffect(:final message):
+        showSuccess(message);
+      case NavigateEffect():
+        _navigate(effect);
     }
-    _wasLoading = p.isLoading;
+  }
 
-    // Error
-    if (p.hasError && !_hadError) {
-      showError(p.errorMessage ?? 'An error occurred');
-      p.clearError();
+  void _navigate(NavigateEffect effect) {
+    if (effect.clearStack) {
+      navigator.pushNamedAndRemoveUntil(
+        effect.route,
+        (route) => false,
+        arguments: effect.arguments,
+      );
+    } else {
+      navigator.pushNamed(effect.route, arguments: effect.arguments);
     }
-    _hadError = p.hasError;
-
-    // Success
-    if (p.hasSuccess && !_hadSuccess) {
-      showSuccess(p.successMessage!);
-      p.clearSuccess();
-    }
-    _hadSuccess = p.hasSuccess;
-
-    // Custom
-    listenToState(context, p);
   }
 
   // ── Loading dialog ────────────────────────────────────────────

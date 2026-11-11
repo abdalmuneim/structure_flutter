@@ -1,20 +1,21 @@
 import 'package:structure_flutter/core/bases/base_use_case.dart';
 import 'package:structure_flutter/core/networking/api_result.dart';
-import 'package:structure_flutter/core/networking/api_service.dart';
-import 'package:structure_flutter/presentaions/modules/login/models/login_request.dart';
-import 'package:structure_flutter/presentaions/modules/login/models/login_response.dart';
+import 'package:structure_flutter/data/models/user.dart';
+import 'package:structure_flutter/domain/repos/auth_repo.dart';
 
-class LoginUseCase extends BaseUseCase<LoginRequest, LoginResponse> {
-  final ApiService _apiService;
+typedef LoginParams = ({String phone, String otpCode});
 
-  LoginUseCase(this._apiService);
+class LoginUseCase extends BaseUseCase<LoginParams, User> {
+  final AuthRepo _authRepo;
+
+  LoginUseCase(this._authRepo);
 
   @override
-  Future<ApiResult<LoginResponse>> call(LoginRequest params) async {
+  Future<ApiResult<User>> call(LoginParams params) async {
     // Skip global 401 handler — on the login screen a 401 means
-    // wrong credentials, not an expired token.
+    // a wrong code, not an expired token.
     return await networkRequest(
-      () => _apiService.login(params.toJson()),
+      () => _authRepo.login(phone: params.phone, otpCode: params.otpCode),
       handleError: (_) {},
     );
   }

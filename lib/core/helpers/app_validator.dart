@@ -75,16 +75,67 @@ class AppValidator {
     return null;
   }
 
+  // ──────────────────────────── Egyptian mobile ────────────────────────────
+
+  static final _egyptianPhoneRegex = RegExp(r'^01[0125][0-9]{8}$');
+
+  /// 11 digits starting with 010, 011, 012 or 015 (same rule as lawmate).
+  static String? egyptianPhone(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return 'Phone field is required';
+    }
+    if (!_egyptianPhoneRegex.hasMatch(value.trim())) {
+      return 'Enter a valid phone number';
+    }
+    return null;
+  }
+
   // ──────────────────────────── Name ────────────────────────────
 
-  static String? name(String? value, {int minLength = 2, int maxLength = 50}) {
-    if (value == null || value.trim().isEmpty) return 'Name is required';
-    final trimmed = value.trim();
-    if (trimmed.length < minLength) {
-      return 'Name must be at least $minLength characters';
+  static final _lettersOnlyRegex = RegExp(r'^[a-zA-Z؀-ۿ]+$');
+
+  /// 3–30 English or Arabic letters, no spaces (same rule as lawmate).
+  static String? name(String? value, [String fieldName = 'Name']) {
+    if (value == null || value.trim().isEmpty) {
+      return '$fieldName is required';
     }
-    if (trimmed.length > maxLength) {
-      return 'Name must be at most $maxLength characters';
+    final trimmed = value.trim();
+    if (trimmed.length < 3 || trimmed.length > 30) {
+      return '$fieldName must be between 3 and 30 characters';
+    }
+    if (!_lettersOnlyRegex.hasMatch(trimmed)) {
+      return '$fieldName must contain letters only';
+    }
+    return null;
+  }
+
+  // ──────────────────────────── Birthdate ────────────────────────────
+
+  static final _dateRegex = RegExp(r'^\d{4}-\d{2}-\d{2}$');
+
+  /// A real yyyy-MM-dd date in the past, at least [minimumAge] years ago.
+  static String? birthdate(String? value, {int minimumAge = 20}) {
+    if (value == null || value.trim().isEmpty) {
+      return 'Date of birth is required';
+    }
+    final trimmed = value.trim();
+    if (!_dateRegex.hasMatch(trimmed)) {
+      return 'Please enter a valid date of birth';
+    }
+    final parts = trimmed.split('-').map(int.parse).toList();
+    final date = DateTime(parts[0], parts[1], parts[2]);
+    // DateTime rolls invalid dates over (e.g. Feb 30 → Mar 2).
+    if (parts[0] < 1900 || date.month != parts[1] || date.day != parts[2]) {
+      return 'Please enter a valid date of birth';
+    }
+
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    if (!date.isBefore(today)) {
+      return 'Date of birth can’t be today or in the future';
+    }
+    if (date.isAfter(DateTime(today.year - minimumAge, today.month, today.day))) {
+      return 'You must be at least $minimumAge years old';
     }
     return null;
   }

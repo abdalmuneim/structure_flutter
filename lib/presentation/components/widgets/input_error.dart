@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
-import 'package:structure_flutter/presentaions/components/utils/ui/ui.dart';
+import 'package:structure_flutter/presentation/components/utils/ui/ui.dart';
 import 'package:structure_flutter/generated/app_assets.dart';
-import 'package:structure_flutter/presentaions/components/extensions/widget_extension.dart';
+import 'package:structure_flutter/presentation/components/extensions/widget_extension.dart';
 
 import 'app_image.dart';
 

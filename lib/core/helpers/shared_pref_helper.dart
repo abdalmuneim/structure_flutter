@@ -6,6 +6,9 @@ class SharedPrefKeys {
   static const String userToken = 'userToken';
   static const String userLanguage = 'userLanguage';
   static const String onboardingCompleted = 'onboardingCompleted';
+
+  /// Set after login or after confirming the code that follows register.
+  static const String isLoggedIn = 'isLoggedIn';
 }
 
 class SharedPrefHelper {

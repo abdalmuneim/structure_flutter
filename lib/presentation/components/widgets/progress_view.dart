@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:structure_flutter/presentaions/components/utils/ui/request_progress.dart';
-import 'package:structure_flutter/presentaions/components/utils/ui/ui.dart';
+import 'package:structure_flutter/presentation/components/utils/ui/request_progress.dart';
+import 'package:structure_flutter/presentation/components/utils/ui/ui.dart';
 
 class ProgressView extends StatefulWidget {
   final bool showProgress;

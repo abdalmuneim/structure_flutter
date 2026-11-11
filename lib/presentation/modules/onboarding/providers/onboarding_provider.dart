@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:structure_flutter/core/bases/base_provider.dart';
 import 'package:structure_flutter/core/helpers/shared_pref_helper.dart';
 import 'package:structure_flutter/core/routing/route_path.dart';
-import 'package:structure_flutter/presentaions/modules/onboarding/models/onboarding_item.dart';
+import 'package:structure_flutter/presentation/modules/onboarding/models/onboarding_item.dart';
 
 class OnboardingProvider extends BaseProvider {
   final pageController = PageController();
@@ -43,15 +43,12 @@ class OnboardingProvider extends BaseProvider {
     );
   }
 
-  Future<void> complete(BuildContext context) async {
-    final navigator = Navigator.of(context);
+  Future<void> complete() async {
     await SharedPrefHelper.setData(SharedPrefKeys.onboardingCompleted, true);
-    navigator.pushNamedAndRemoveUntil(RoutePath.login, (route) => false);
+    navigateTo(RoutePath.login, clearStack: true);
   }
 
-  Future<void> skip(BuildContext context) async {
-    await complete(context);
-  }
+  Future<void> skip() => complete();
 
   @override
   void dispose() {

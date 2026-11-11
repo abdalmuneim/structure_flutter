@@ -2,39 +2,50 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'register_request.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(
+  createFactory: false,
+  fieldRename: FieldRename.snake,
+  includeIfNull: false,
+)
 class RegisterRequest {
-  final String? email;
-  final String? password;
-  @JsonKey(name: 'password_confirmation')
-  final String? passwordConfirmation;
-  @JsonKey(name: 'user_name')
-  final String? userName;
-  final String? phone;
-  final String? gender;
-  @JsonKey(name: 'device_id')
-  final String? deviceId;
-  @JsonKey(name: 'device_type')
-  final String? deviceType;
-  @JsonKey(name: 'fcm_token')
-  final String? fcmToken;
-  final String? language;
-
-  RegisterRequest({
-    this.email,
-    this.password,
-    this.passwordConfirmation,
-    this.userName,
-    this.phone,
-    this.gender,
-    this.deviceId,
-    this.deviceType,
-    this.fcmToken,
+  const RegisterRequest({
+    required this.firstName,
+    required this.lastName,
+    required this.email,
+    required this.phone,
+    required this.birthdate,
+    required this.gender,
     this.language,
+    this.notificationToken,
   });
 
-  factory RegisterRequest.fromJson(Map<String, dynamic> json) =>
-      _$RegisterRequestFromJson(json);
+  final String firstName;
+  final String lastName;
+  final String email;
+
+  /// International format, e.g. +201012345678.
+  final String phone;
+
+  /// yyyy-MM-dd
+  final String birthdate;
+
+  /// "male" or "female".
+  final String gender;
+
+  /// Filled in by the repository from the saved app language.
+  final String? language;
+  final String? notificationToken;
+
+  RegisterRequest withLanguage(String language) => RegisterRequest(
+    firstName: firstName,
+    lastName: lastName,
+    email: email,
+    phone: phone,
+    birthdate: birthdate,
+    gender: gender,
+    language: language,
+    notificationToken: notificationToken,
+  );
 
   Map<String, dynamic> toJson() => _$RegisterRequestToJson(this);
 }

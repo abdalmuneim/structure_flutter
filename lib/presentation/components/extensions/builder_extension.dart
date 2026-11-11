@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:structure_flutter/core/bases/base_use_case.dart';
-import 'package:structure_flutter/presentaions/components/utils/ui/ui.dart';
+import 'package:structure_flutter/presentation/components/utils/ui/ui.dart';
 
 extension SceneBuilder on State {
   Future<dynamic> push(BuildContext context, Widget screen) {

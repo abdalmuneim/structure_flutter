@@ -4,7 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:structure_flutter/generated/app_assets.dart';
-import 'package:structure_flutter/presentaions/components/utils/ui/ui.dart';
+import 'package:structure_flutter/presentation/components/utils/ui/ui.dart';
 
 Widget appImage(
   String image, {

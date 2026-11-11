@@ -2,37 +2,32 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'login_request.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(
+  createFactory: false,
+  fieldRename: FieldRename.snake,
+  includeIfNull: false,
+)
 class LoginRequest {
-  final String? email;
-  final String? password;
-  final String? phone;
-  @JsonKey(name: 'user_name')
-  final String? userName;
-  @JsonKey(name: 'device_id')
-  final String? deviceId;
-  @JsonKey(name: 'device_type')
-  final String? deviceType;
-  @JsonKey(name: 'fcm_token')
-  final String? fcmToken;
-  final String? language;
-  @JsonKey(name: 'country_code')
-  final String? countryCode;
-
-  LoginRequest({
-    this.email,
-    this.password,
-    this.phone,
-    this.userName,
-    this.deviceId,
-    this.deviceType,
-    this.fcmToken,
-    this.language,
-    this.countryCode,
+  const LoginRequest({
+    required this.phone,
+    required this.otpCode,
+    required this.language,
+    this.notificationToken,
   });
 
-  factory LoginRequest.fromJson(Map<String, dynamic> json) =>
-      _$LoginRequestFromJson(json);
+  final String phone;
+  final String otpCode;
+  final String language;
+  final String? notificationToken;
 
   Map<String, dynamic> toJson() => _$LoginRequestToJson(this);
+}
+
+@JsonSerializable(createFactory: false, fieldRename: FieldRename.snake)
+class VerifyOtpRequest {
+  const VerifyOtpRequest({required this.otpCode});
+
+  final String otpCode;
+
+  Map<String, dynamic> toJson() => _$VerifyOtpRequestToJson(this);
 }

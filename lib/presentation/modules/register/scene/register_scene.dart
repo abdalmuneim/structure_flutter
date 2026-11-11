@@ -1,200 +1,37 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:structure_flutter/core/bases/base_scene.dart';
 import 'package:structure_flutter/core/helpers/app_validator.dart';
-import 'package:structure_flutter/core/routing/route_path.dart';
-import 'package:structure_flutter/presentaions/components/utils/ui/ui.dart';
-import 'package:structure_flutter/presentaions/components/widgets/app_button.dart';
-import 'package:structure_flutter/presentaions/components/widgets/app_textfield.dart';
-import 'package:structure_flutter/presentaions/modules/register/providers/register_provider.dart';
+import 'package:structure_flutter/presentation/components/utils/ui/ui.dart';
+import 'package:structure_flutter/presentation/components/widgets/app_button.dart';
+import 'package:structure_flutter/presentation/components/widgets/app_textfield.dart';
+import 'package:structure_flutter/presentation/components/widgets/auth_header.dart';
+import 'package:structure_flutter/presentation/components/widgets/input_error.dart';
+import 'package:structure_flutter/presentation/modules/register/providers/register_provider.dart';
 
-class RegisterScene extends BaseScene<RegisterProvider, void> {
+class RegisterScene extends BaseScene<RegisterProvider> {
   const RegisterScene({super.key});
 
   @override
-  BaseSceneState<RegisterProvider, void> createState() =>
-      _RegisterSceneState();
+  BaseSceneState<RegisterProvider> createState() => _RegisterSceneState();
 }
 
-class _RegisterSceneState extends BaseSceneState<RegisterProvider, void> {
+class _RegisterSceneState extends BaseSceneState<RegisterProvider> {
   @override
   Widget buildWidget(BuildContext context, RegisterProvider p) {
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // Curved gradient header
-            ClipPath(
-              clipper: _WaveCurveClipper(),
-              child: Container(
-                width: double.infinity,
-                padding: EdgeInsets.only(
-                  top: MediaQuery.of(context).padding.top + 24,
-                  bottom: 60,
-                ),
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [
-                      AppColors.primary,
-                      Color(0xFF01468A),
-                    ],
-                  ),
-                ),
-                child: Column(
-                  children: [
-                    Container(
-                      width: 80,
-                      height: 80,
-                      decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.15),
-                        shape: BoxShape.circle,
-                      ),
-                      child: const Icon(
-                        Icons.local_hospital,
-                        size: 40,
-                        color: AppColors.white,
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    const Text(
-                      'Create Account',
-                      style: TextStyle(
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.white,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'Sign up to get started',
-                      style: TextStyle(
-                        fontSize: 15,
-                        color: Colors.white.withValues(alpha: 0.7),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+            AuthHeader(
+              title: p.accountCreated ? 'Sign Up Successful!' : 'Sign Up For Free',
+              subtitle: p.accountCreated
+                  ? 'Your account for ${p.phone} is ready'
+                  : 'Create your account for ${p.phone}',
+              onBack: p.accountCreated ? null : () => navigator.maybePop(),
             ),
-
-            // Form section
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: Form(
-                key: p.formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    const SizedBox(height: 8),
-                    AppTextField(
-                      controller: p.registerForm.userNameController,
-                      validator: (value) => AppValidator.required(value),
-                      title: 'Full Name',
-                    ),
-                    const SizedBox(height: 16),
-                    AppTextField(
-                      controller: p.registerForm.emailController,
-                      keyboardType: TextInputType.emailAddress,
-                      validator: (value) => AppValidator.email(value),
-                      title: 'Email',
-                    ),
-                    const SizedBox(height: 16),
-                    AppTextField(
-                      controller: p.registerForm.phoneController,
-                      keyboardType: TextInputType.phone,
-                      validator: (value) => AppValidator.required(value),
-                      title: 'Phone',
-                    ),
-                    const SizedBox(height: 16),
-                    AppTextField(
-                      controller: p.registerForm.genderController,
-                      title: 'Gender (optional)',
-                    ),
-                    const SizedBox(height: 16),
-                    AppTextField(
-                      controller: p.registerForm.passwordController,
-                      obscureText: p.obscurePassword,
-                      validator: (value) => AppValidator.password(value),
-                      title: 'Password',
-                      suffix: GestureDetector(
-                        onTap: p.togglePasswordVisibility,
-                        child: Icon(
-                          p.obscurePassword
-                              ? Icons.visibility_off
-                              : Icons.visibility,
-                          color: Colors.grey[500],
-                          size: 20,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    AppTextField(
-                      controller:
-                          p.registerForm.passwordConfirmationController,
-                      obscureText: p.obscureConfirmPassword,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please confirm your password';
-                        }
-                        if (value !=
-                            p.registerForm.passwordController.text) {
-                          return 'Passwords do not match';
-                        }
-                        return null;
-                      },
-                      title: 'Confirm Password',
-                      suffix: GestureDetector(
-                        onTap: p.toggleConfirmPasswordVisibility,
-                        child: Icon(
-                          p.obscureConfirmPassword
-                              ? Icons.visibility_off
-                              : Icons.visibility,
-                          color: Colors.grey[500],
-                          size: 20,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 28),
-                    AppButton(
-                      title: 'Register',
-                      gradient: true,
-                      shadow: true,
-                      onPressed: () => p.register(context),
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                    ),
-                    const SizedBox(height: 24),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Already have an account? ',
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.grey[600],
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () => Navigator.of(context)
-                              .pushReplacementNamed(RoutePath.login),
-                          child: const Text(
-                            'Login',
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: AppColors.primary,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 24),
-                  ],
-                ),
-              ),
+              child: p.accountCreated ? _success(p) : _form(p),
             ),
           ],
         ),
@@ -202,41 +39,133 @@ class _RegisterSceneState extends BaseSceneState<RegisterProvider, void> {
     );
   }
 
-  @override
-  void listenToState(BuildContext context, RegisterProvider p) {
-    log('Listening to RegisterProvider state changes');
-  }
-}
-
-class _WaveCurveClipper extends CustomClipper<Path> {
-  @override
-  Path getClip(Size size) {
-    final path = Path();
-    path.lineTo(0, size.height - 40);
-
-    final firstControlPoint = Offset(size.width * 0.25, size.height);
-    final firstEndPoint = Offset(size.width * 0.5, size.height - 20);
-    path.quadraticBezierTo(
-      firstControlPoint.dx,
-      firstControlPoint.dy,
-      firstEndPoint.dx,
-      firstEndPoint.dy,
+  Widget _form(RegisterProvider p) {
+    return Form(
+      key: p.formKey,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          const SizedBox(height: 8),
+          AppTextField(
+            title: 'First Name *',
+            controller: p.firstNameController,
+            validator: (value) => AppValidator.name(value, 'First Name'),
+          ),
+          const SizedBox(height: 16),
+          AppTextField(
+            title: 'Last Name *',
+            controller: p.lastNameController,
+            validator: (value) => AppValidator.name(value, 'Last Name'),
+          ),
+          const SizedBox(height: 16),
+          AppTextField(
+            title: 'Email Address *',
+            controller: p.emailController,
+            keyboardType: TextInputType.emailAddress,
+            validator: AppValidator.email,
+          ),
+          const SizedBox(height: 16),
+          AppTextField(
+            title: 'Date of Birth *',
+            hint: 'yyyy-mm-dd',
+            controller: p.birthdateController,
+            readOnly: true,
+            onTap: () => _pickBirthdate(p),
+            endIcon: const Icon(Icons.calendar_today, size: 18),
+            validator: (value) => AppValidator.birthdate(value),
+          ),
+          const SizedBox(height: 16),
+          const Text(
+            'Gender *',
+            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+          ),
+          const SizedBox(height: 8),
+          Row(
+            children: [
+              for (final gender in RegisterProvider.genders) ...[
+                ChoiceChip(
+                  label: Text(gender == 'male' ? 'Male' : 'Female'),
+                  selected: p.gender == gender,
+                  onSelected: (_) => p.selectGender(gender),
+                  selectedColor: AppColors.primary.withValues(alpha: 0.15),
+                ),
+                const SizedBox(width: 12),
+              ],
+            ],
+          ),
+          if (p.showGenderError) inputError('Gender required'),
+          const SizedBox(height: 16),
+          Row(
+            children: [
+              Checkbox(
+                value: p.termsAccepted,
+                activeColor: AppColors.primary,
+                onChanged: (value) => p.setTermsAccepted(value ?? false),
+              ),
+              const Expanded(
+                child: Text(
+                  'I accept the Terms & Conditions',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.primary,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 28),
+          AppButton(
+            title: 'Continue',
+            gradient: true,
+            shadow: true,
+            onPressed: p.register,
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+          ),
+          const SizedBox(height: 24),
+        ],
+      ),
     );
-
-    final secondControlPoint = Offset(size.width * 0.75, size.height - 40);
-    final secondEndPoint = Offset(size.width, size.height - 10);
-    path.quadraticBezierTo(
-      secondControlPoint.dx,
-      secondControlPoint.dy,
-      secondEndPoint.dx,
-      secondEndPoint.dy,
-    );
-
-    path.lineTo(size.width, 0);
-    path.close();
-    return path;
   }
 
-  @override
-  bool shouldReclip(covariant CustomClipper<Path> oldClipper) => false;
+  Widget _success(RegisterProvider p) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        const SizedBox(height: 8),
+        const Icon(Icons.check_circle, size: 72, color: AppColors.success),
+        const SizedBox(height: 16),
+        Text(
+          'You have successfully created your account. '
+          'Confirm your phone number with the code we send you to continue.',
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: 15, color: Colors.grey[700], height: 1.4),
+        ),
+        const SizedBox(height: 32),
+        AppButton(
+          title: 'Verify Phone Number',
+          gradient: true,
+          shadow: true,
+          onPressed: p.continueToVerification,
+          fontSize: 16,
+          fontWeight: FontWeight.w600,
+        ),
+        const SizedBox(height: 24),
+      ],
+    );
+  }
+
+  /// Must be at least 20 years old, same limits as lawmate.
+  Future<void> _pickBirthdate(RegisterProvider p) async {
+    final now = DateTime.now();
+    final lastDate = DateTime(now.year - 20, now.month, now.day);
+    final picked = await showDatePicker(
+      context: context,
+      initialDate: p.birthdate ?? lastDate,
+      firstDate: DateTime(now.year - 100),
+      lastDate: lastDate,
+    );
+    if (picked != null) p.setBirthdate(picked);
+  }
 }

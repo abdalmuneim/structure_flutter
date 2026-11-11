@@ -22,7 +22,7 @@ dependencies:
   flutter_secure_storage: ^9.2.4
   provider: ^6.1.5+1
   bot_toast: ^4.1.3
-  font_awesome_flutter: ^10.12.0
+  font_awesome_flutter: ^11.0.0
   cached_network_image: ^3.4.1
   flutter_svg: ^2.2.3
   intl: ^0.20.2
@@ -45,7 +45,6 @@ flutter:
     - assets/images/common/
     - assets/fonts/
     - assets/fonts/poppins/
-    - assets/json/
 
   fonts:
     - family: poppins

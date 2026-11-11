@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:structure_flutter/presentaions/components/utils/ui/ui.dart';
+import 'package:structure_flutter/presentation/components/utils/ui/ui.dart';
 
 class AppOutlineInputBorder extends OutlineInputBorder {
   AppOutlineInputBorder({

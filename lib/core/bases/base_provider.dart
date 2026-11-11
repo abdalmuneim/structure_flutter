@@ -1,65 +1,94 @@
-import 'package:flutter/material.dart';
-import 'package:structure_flutter/core/networking/api_error_model.dart';
+import 'dart:async';
 
-/// Provider for scenes that have **no** form model (e.g. Splash, Settings).
-class BaseProvider<D extends Object?> extends ChangeNotifier {
-  bool _isLoading = false;
-  ApiErrorModel? _error;
-  String? _errorMessage;
-  String? _successMessage;
+import 'package:flutter/foundation.dart';
+import 'package:structure_flutter/core/bases/ui_effect.dart';
+import 'package:structure_flutter/core/networking/api_result.dart';
+
+/// Base class for every screen provider.
+///
+/// A provider talks to its screen in two ways:
+/// - **State**: fields plus `notifyListeners()`. The screen rebuilds.
+/// - **Effects**: one-time actions (loading dialog, toast, navigation) sent
+///   with the helpers below. `BaseScene` handles them, and there is nothing
+///   to reset afterwards.
+///
+/// Providers never need a `BuildContext`.
+class BaseProvider extends ChangeNotifier {
+  final StreamController<UiEffect> _effects =
+      StreamController<UiEffect>.broadcast();
   bool _isDisposed = false;
 
-  D? model;
+  /// Listened to by `BaseScene`.
+  Stream<UiEffect> get effects => _effects.stream;
 
-  bool get isLoading => _isLoading;
-  ApiErrorModel? get error => _error;
-  String? get errorMessage => _errorMessage;
-  String? get successMessage => _successMessage;
-  bool get hasError => _error != null || _errorMessage != null;
-  bool get hasSuccess => _successMessage != null;
+  // ── Effects ───────────────────────────────────────────────────
 
-  void setLoading(bool value) {
-    _isLoading = value;
-    _safeNotifyListeners();
+  @protected
+  void sendEffect(UiEffect effect) {
+    if (!_effects.isClosed) _effects.add(effect);
   }
 
-  void setError(ApiErrorModel? error) {
-    _error = error;
-    _errorMessage = error?.message;
-    _safeNotifyListeners();
+  @protected
+  void showLoading() => sendEffect(const ShowLoadingEffect());
+
+  @protected
+  void hideLoading() => sendEffect(const HideLoadingEffect());
+
+  @protected
+  void showError(String message) => sendEffect(ShowErrorEffect(message));
+
+  @protected
+  void showSuccess(String message) => sendEffect(ShowSuccessEffect(message));
+
+  @protected
+  void navigateTo(
+    String route, {
+    Object? arguments,
+    bool clearStack = false,
+  }) {
+    sendEffect(
+      NavigateEffect(route, arguments: arguments, clearStack: clearStack),
+    );
   }
 
-  void setErrorMessage(String? message) {
-    _errorMessage = message;
+  // ── Use cases ─────────────────────────────────────────────────
 
-    _safeNotifyListeners();
-  }
-
-  void setSuccess(String message) {
-    _successMessage = message;
-    _safeNotifyListeners();
-  }
-
-  void clearError() {
-    _error = null;
-    _errorMessage = null;
-    _safeNotifyListeners();
-  }
-
-  void clearSuccess() {
-    _successMessage = null;
-    _safeNotifyListeners();
-  }
-
-  void _safeNotifyListeners() {
-    if (!_isDisposed) {
-      notifyListeners();
+  /// Runs [useCase] while the loading dialog is shown.
+  ///
+  /// On success calls [onSuccess] with the data; on failure shows the error.
+  @protected
+  Future<void> runUseCase<R>(
+    Future<ApiResult<R>> Function() useCase, {
+    required FutureOr<void> Function(R data) onSuccess,
+  }) async {
+    showLoading();
+    final ApiResult<R> result;
+    try {
+      result = await useCase();
+    } finally {
+      hideLoading();
     }
+
+    switch (result) {
+      case Success<R>(:final data):
+        await onSuccess(data);
+      case Failure<R>(:final errorHandler):
+        showError(errorHandler.apiErrorModel.message ?? 'An error occurred');
+    }
+  }
+
+  // ── Lifecycle ─────────────────────────────────────────────────
+
+  /// Safe to call after an async gap: does nothing once disposed.
+  @override
+  void notifyListeners() {
+    if (!_isDisposed) super.notifyListeners();
   }
 
   @override
   void dispose() {
     _isDisposed = true;
+    _effects.close();
     super.dispose();
   }
 }

@@ -1,7 +1,7 @@
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
-import 'package:structure_flutter/presentaions/components/utils/ui/ui.dart';
-import 'package:structure_flutter/presentaions/components/widgets/outline_input_border.dart';
+import 'package:structure_flutter/presentation/components/utils/ui/ui.dart';
+import 'package:structure_flutter/presentation/components/widgets/outline_input_border.dart';
 
 Widget dropDown<T>({
   String? title,

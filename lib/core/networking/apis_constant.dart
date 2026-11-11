@@ -1,8 +1,20 @@
+/// Endpoint paths, relative to the environment's API URL
+/// (`BuildEnvironment.keys.apiUrl`, set on Dio in `DioFactory`).
 class ApiConstants {
-  static const String apiBaseUrl = "https://vcare.integration25.com/api/";
+  // ── Authentication ──────────────────────────────────────────────
+  /// Body: {phone}. Response data: {is_exist}.
+  static const String handshake = "authentication/login/handshake";
 
-  static const String login = "auth/login";
-  static const String signup = "auth/register";
+  /// Body: {phone, otp_code, language}. Response data: user + access_token.
+  static const String login = "authentication/login";
+
+  /// Body: {first_name, last_name, email, phone, birthdate, gender, language}.
+  static const String register = "authentication/register";
+
+  /// Confirms the code sent after register. Body: {otp_code}. Needs the token.
+  static const String verifyOtp = "authentication/verify-otp";
+
+  static const String resendOtp = "authentication/resend-otp";
 }
 
 class ApiErrorsMessage {

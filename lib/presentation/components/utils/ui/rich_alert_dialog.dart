@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:structure_flutter/presentaions/components/widgets/app_button.dart';
+import 'package:structure_flutter/presentation/components/widgets/app_button.dart';
 import '../../extensions/builder_extension.dart';
 
 enum DialogSize { height, medium, small }

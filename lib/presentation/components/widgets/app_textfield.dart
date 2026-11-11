@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:structure_flutter/core/helpers/constants.dart';
 
-import 'package:structure_flutter/presentaions/components/extensions/widget_extension.dart';
-import 'package:structure_flutter/presentaions/components/utils/ui/ui.dart';
+import 'package:structure_flutter/presentation/components/extensions/widget_extension.dart';
+import 'package:structure_flutter/presentation/components/utils/ui/ui.dart';
 import 'app_image.dart';
 import 'input_error.dart';
 import 'outline_input_border.dart';

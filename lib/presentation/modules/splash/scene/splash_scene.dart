@@ -1,21 +1,19 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:structure_flutter/core/bases/base_scene.dart';
-import 'package:structure_flutter/presentaions/components/utils/ui/ui.dart';
-import 'package:structure_flutter/presentaions/modules/splash/providers/splash_provider.dart';
+import 'package:structure_flutter/presentation/components/utils/ui/ui.dart';
+import 'package:structure_flutter/presentation/modules/splash/providers/splash_provider.dart';
 
-class SplashScene extends BaseScene<SplashProvider, void> {
+class SplashScene extends BaseScene<SplashProvider> {
   const SplashScene({super.key});
 
   @override
-  BaseSceneState<SplashProvider, void> createState() => _SplashSceneState();
+  BaseSceneState<SplashProvider> createState() => _SplashSceneState();
 }
 
-class _SplashSceneState extends BaseSceneState<SplashProvider, void> {
+class _SplashSceneState extends BaseSceneState<SplashProvider> {
   @override
   void afterFirstFrame() {
-    provider.init(context);
+    provider.init();
   }
 
   @override
@@ -115,10 +113,5 @@ class _SplashSceneState extends BaseSceneState<SplashProvider, void> {
         ),
       ),
     );
-  }
-
-  @override
-  void listenToState(BuildContext context, SplashProvider provider) {
-    log('Listening to SplashProvider state changes');
   }
 }

@@ -1,7 +1,7 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:structure_flutter/presentaions/components/utils/ui/ui.dart';
+import 'package:structure_flutter/presentation/components/utils/ui/ui.dart';
 
 class Alert {
   static final Alert _instance = Alert();
@@ -24,7 +24,7 @@ class Alert {
     if (message == null || message.isEmpty) return;
     showToast(
       message,
-      FontAwesomeIcons.exclamationTriangle,
+      FontAwesomeIcons.triangleExclamation,
       AppColors.warning,
       duration: duration,
     );
@@ -34,7 +34,7 @@ class Alert {
     if (message == null || message.isEmpty) return;
     showToast(
       message,
-      FontAwesomeIcons.exclamationTriangle,
+      FontAwesomeIcons.triangleExclamation,
       AppColors.error,
       duration: duration,
     );
@@ -42,7 +42,7 @@ class Alert {
 
   void showToast(
     String message,
-    IconData icon,
+    FaIconData icon,
     Color color, {
     int duration = 2,
   }) {

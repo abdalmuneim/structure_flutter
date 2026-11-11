@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:structure_flutter/presentaions/components/extensions/builder_extension.dart';
-import 'package:structure_flutter/presentaions/components/utils/ui/alert.dart';
-import 'package:structure_flutter/presentaions/components/utils/ui/rich_alert_dialog.dart';
-import 'package:structure_flutter/presentaions/components/utils/ui/ui.dart';
-import 'package:structure_flutter/presentaions/components/widgets/app_button.dart';
+import 'package:structure_flutter/presentation/components/extensions/builder_extension.dart';
+import 'package:structure_flutter/presentation/components/utils/ui/alert.dart';
+import 'package:structure_flutter/presentation/components/utils/ui/rich_alert_dialog.dart';
+import 'package:structure_flutter/presentation/components/utils/ui/ui.dart';
+import 'package:structure_flutter/presentation/components/widgets/app_button.dart';
 
 extension Alerts on State {
   void showSuccess(String message) {

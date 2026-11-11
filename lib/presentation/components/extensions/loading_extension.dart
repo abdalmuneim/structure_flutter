@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:structure_flutter/presentaions/components/widgets/progress_view.dart';
+import 'package:structure_flutter/presentation/components/widgets/progress_view.dart';
 import '../utils/ui/ui.dart';
 
 extension Loading on State {

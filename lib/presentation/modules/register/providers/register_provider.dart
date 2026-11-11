@@ -1,91 +1,104 @@
 import 'package:flutter/material.dart';
 import 'package:structure_flutter/core/bases/base_provider.dart';
-import 'package:structure_flutter/core/helpers/shared_pref_helper.dart';
-import 'package:structure_flutter/core/networking/api_result.dart';
 import 'package:structure_flutter/core/routing/route_path.dart';
-import 'package:structure_flutter/presentaions/modules/register/models/register_form.dart';
-import 'package:structure_flutter/presentaions/modules/register/models/register_request.dart';
-import 'package:structure_flutter/presentaions/modules/register/models/register_response.dart';
-import 'package:structure_flutter/presentaions/modules/register/use_cases/register_use_case.dart';
+import 'package:structure_flutter/data/models/register_request.dart';
+import 'package:structure_flutter/domain/use_cases/register_use_case.dart';
 
+/// Register form for a phone that has no account yet (from the phone screen).
+///
+/// After the account is created the screen shows a success step; continuing
+/// opens the OTP screen to confirm the phone.
 class RegisterProvider extends BaseProvider {
+  RegisterProvider(this._registerUseCase, {required this.phone});
+
   final RegisterUseCase _registerUseCase;
 
-  RegisterProvider(this._registerUseCase) : super();
+  /// International format, e.g. +201012345678.
+  final String phone;
 
-  final RegisterForm registerForm = RegisterForm(
-    emailController: TextEditingController(),
-    passwordController: TextEditingController(),
-    passwordConfirmationController: TextEditingController(),
-    userNameController: TextEditingController(),
-    phoneController: TextEditingController(),
-    genderController: TextEditingController(),
-  );
+  static const genders = ['male', 'female'];
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final TextEditingController firstNameController = TextEditingController();
+  final TextEditingController lastNameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
 
-  bool _obscurePassword = true;
-  bool get obscurePassword => _obscurePassword;
+  /// Shows the picked date as yyyy-MM-dd, the format the API expects.
+  final TextEditingController birthdateController = TextEditingController();
 
-  bool _obscureConfirmPassword = true;
-  bool get obscureConfirmPassword => _obscureConfirmPassword;
+  DateTime? _birthdate;
+  DateTime? get birthdate => _birthdate;
 
-  void togglePasswordVisibility() {
-    _obscurePassword = !_obscurePassword;
+  String? _gender;
+  String? get gender => _gender;
+
+  bool _showGenderError = false;
+  bool get showGenderError => _showGenderError;
+
+  bool _termsAccepted = false;
+  bool get termsAccepted => _termsAccepted;
+
+  bool _accountCreated = false;
+  bool get accountCreated => _accountCreated;
+
+  void setBirthdate(DateTime date) {
+    _birthdate = date;
+    birthdateController.text =
+        '${date.year}-${date.month.toString().padLeft(2, '0')}-'
+        '${date.day.toString().padLeft(2, '0')}';
     notifyListeners();
   }
 
-  void toggleConfirmPasswordVisibility() {
-    _obscureConfirmPassword = !_obscureConfirmPassword;
+  void selectGender(String gender) {
+    _gender = gender;
+    _showGenderError = false;
     notifyListeners();
   }
 
-  Future<void> register(BuildContext context) async {
-    if (!formKey.currentState!.validate()) return;
+  void setTermsAccepted(bool value) {
+    _termsAccepted = value;
+    notifyListeners();
+  }
 
-    clearError();
-    setLoading(true);
+  Future<void> register() async {
+    if (!_termsAccepted) {
+      showError('You must accept the terms and conditions to proceed');
+      return;
+    }
 
-    final navigator = Navigator.of(context);
+    final isFormValid = formKey.currentState!.validate();
+    _showGenderError = _gender == null;
+    notifyListeners();
+    if (!isFormValid || _gender == null) return;
+
     final request = RegisterRequest(
-      email: registerForm.emailController.text.trim(),
-      password: registerForm.passwordController.text.trim(),
-      passwordConfirmation:
-          registerForm.passwordConfirmationController.text.trim(),
-      userName: registerForm.userNameController.text.trim(),
-      phone: registerForm.phoneController.text.trim(),
-      gender: registerForm.genderController.text.trim(),
+      firstName: firstNameController.text.trim(),
+      lastName: lastNameController.text.trim(),
+      email: emailController.text.trim(),
+      phone: phone,
+      birthdate: birthdateController.text,
+      gender: _gender!,
     );
 
-    final result = await _registerUseCase.call(request);
-
-    setLoading(false);
-
-    switch (result) {
-      case Success<RegisterResponse>(:final data):
-        await _handleRegisterSuccess(navigator, data);
-      case Failure<RegisterResponse>(:final errorHandler):
-        setError(errorHandler.apiErrorModel);
-    }
+    await runUseCase(
+      () => _registerUseCase(request),
+      onSuccess: (_) {
+        _accountCreated = true;
+        notifyListeners();
+      },
+    );
   }
 
-  Future<void> _handleRegisterSuccess(
-    NavigatorState navigator,
-    RegisterResponse response,
-  ) async {
-    if (response.token != null) {
-      await SharedPrefHelper.setSecuredString(
-        SharedPrefKeys.userToken,
-        response.token!,
-      );
-    }
-
-    navigator.pushNamedAndRemoveUntil(RoutePath.main, (route) => false);
+  void continueToVerification() {
+    navigateTo(RoutePath.registerOtp, arguments: phone);
   }
 
   @override
   void dispose() {
-    registerForm.dispose();
+    firstNameController.dispose();
+    lastNameController.dispose();
+    emailController.dispose();
+    birthdateController.dispose();
     super.dispose();
   }
 }

@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:structure_flutter/core/bases/base_scene.dart';
-import 'package:structure_flutter/presentaions/components/utils/ui/ui.dart';
-import 'package:structure_flutter/presentaions/components/widgets/app_button.dart';
-import 'package:structure_flutter/presentaions/modules/onboarding/models/onboarding_item.dart';
-import 'package:structure_flutter/presentaions/modules/onboarding/providers/onboarding_provider.dart';
+import 'package:structure_flutter/presentation/components/utils/ui/ui.dart';
+import 'package:structure_flutter/presentation/components/widgets/app_button.dart';
+import 'package:structure_flutter/presentation/modules/onboarding/models/onboarding_item.dart';
+import 'package:structure_flutter/presentation/modules/onboarding/providers/onboarding_provider.dart';
 
-class OnboardingScene extends BaseScene<OnboardingProvider, void> {
+class OnboardingScene extends BaseScene<OnboardingProvider> {
   const OnboardingScene({super.key});
 
   @override
-  BaseSceneState<OnboardingProvider, void> createState() =>
+  BaseSceneState<OnboardingProvider> createState() =>
       _OnboardingSceneState();
 }
 
 class _OnboardingSceneState
-    extends BaseSceneState<OnboardingProvider, void> {
+    extends BaseSceneState<OnboardingProvider> {
   // Accent colors per page
   static const _pageAccentColors = [
     AppColors.primary,          // Page 1: primary blue
@@ -34,7 +34,7 @@ class _OnboardingSceneState
               child: Align(
                 alignment: Alignment.topRight,
                 child: TextButton(
-                  onPressed: () => provider.skip(context),
+                  onPressed: () => provider.skip(),
                   child: Text(
                     'Skip',
                     style: TextStyle(
@@ -95,7 +95,7 @@ class _OnboardingSceneState
                 backgroundColor: p.isLastPage ? null : AppColors.primary,
                 textColor: p.isLastPage ? AppColors.primary : AppColors.white,
                 onPressed: p.isLastPage
-                    ? () => provider.complete(context)
+                    ? () => provider.complete()
                     : provider.nextPage,
                 fontSize: 16,
                 fontWeight: FontWeight.w600,

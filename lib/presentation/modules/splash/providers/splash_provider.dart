@@ -1,12 +1,9 @@
-import 'package:flutter/material.dart';
 import 'package:structure_flutter/core/bases/base_provider.dart';
 import 'package:structure_flutter/core/helpers/shared_pref_helper.dart';
 import 'package:structure_flutter/core/routing/route_path.dart';
 
 class SplashProvider extends BaseProvider {
-  Future<void> init(BuildContext context) async {
-    final navigator = Navigator.of(context);
-
+  Future<void> init() async {
     await Future.delayed(const Duration(seconds: 2));
 
     final onboardingDone = await SharedPrefHelper.getBool(
@@ -14,21 +11,22 @@ class SplashProvider extends BaseProvider {
     );
 
     if (onboardingDone != true) {
-      navigator.pushNamedAndRemoveUntil(
-        RoutePath.onboarding,
-        (route) => false,
-      );
+      navigateTo(RoutePath.onboarding, clearStack: true);
       return;
     }
 
-    final token = await SharedPrefHelper.getSecuredString(
+    // A token alone isn't enough: register saves one before the phone is
+    // confirmed. isLoggedIn is set after login or after that confirmation.
+    final bool isLoggedIn = await SharedPrefHelper.getBool(
+      SharedPrefKeys.isLoggedIn,
+    );
+    final String token = await SharedPrefHelper.getSecuredString(
       SharedPrefKeys.userToken,
     );
 
-    if (token != null && token.toString().isNotEmpty) {
-      navigator.pushNamedAndRemoveUntil(RoutePath.main, (route) => false);
-    } else {
-      navigator.pushNamedAndRemoveUntil(RoutePath.login, (route) => false);
-    }
+    navigateTo(
+      isLoggedIn && token.isNotEmpty ? RoutePath.main : RoutePath.login,
+      clearStack: true,
+    );
   }
 }

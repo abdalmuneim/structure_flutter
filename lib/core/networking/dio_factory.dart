@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:structure_flutter/core/environment/build_environment.dart';
 import 'package:structure_flutter/core/helpers/shared_pref_helper.dart';
 
 class DioFactory {
@@ -15,6 +16,7 @@ class DioFactory {
 
     final dio = Dio(
       BaseOptions(
+        baseUrl: BuildEnvironment.keys.apiUrl,
         connectTimeout: timeOut,
         receiveTimeout: timeOut,
         headers: {'Accept': 'application/json'},

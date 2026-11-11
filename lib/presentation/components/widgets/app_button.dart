@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:structure_flutter/presentaions/components/extensions/widget_extension.dart';
-import 'package:structure_flutter/presentaions/components/utils/ui/app_gradient.dart';
-import 'package:structure_flutter/presentaions/components/utils/ui/ui.dart';
-import 'package:structure_flutter/presentaions/components/widgets/app_image.dart';
+import 'package:structure_flutter/presentation/components/extensions/widget_extension.dart';
+import 'package:structure_flutter/presentation/components/utils/ui/app_gradient.dart';
+import 'package:structure_flutter/presentation/components/utils/ui/ui.dart';
+import 'package:structure_flutter/presentation/components/widgets/app_image.dart';
 
 class AppButton extends Container {
   AppButton({
@@ -126,7 +125,7 @@ class ChildButton extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         if (icon != null) appImage(icon!, width: iconSize, height: iconSize),
-        if (fontAwesomeIcon != null) FaIcon(fontAwesomeIcon, size: iconSize),
+        if (fontAwesomeIcon != null) Icon(fontAwesomeIcon, size: iconSize),
         icon != null || fontAwesomeIcon != null
             ? const SizedBox(width: 5)
             : const SizedBox(width: 5),
@@ -138,7 +137,7 @@ class ChildButton extends StatelessWidget {
           Row(
             children: [
               5.width,
-              FaIcon(prefixIcon, size: iconSize),
+              Icon(prefixIcon, size: iconSize),
             ],
           ),
         if (prefixImage != null)
