@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:structure_flutter/presentation/components/utils/ui/ui.dart';
+import 'package:structure_flutter/presentation/components/widgets/language_switcher.dart';
 
 /// Curved gradient header used by the login, register and OTP screens.
 class AuthHeader extends StatelessWidget {
@@ -39,15 +40,21 @@ class AuthHeader extends StatelessWidget {
         ),
         child: Column(
           children: [
-            Align(
-              alignment: AlignmentDirectional.centerStart,
-              child: onBack == null
-                  ? const SizedBox(height: 48)
-                  : IconButton(
-                      onPressed: onBack,
-                      tooltip: 'Back',
-                      icon: const Icon(Icons.arrow_back, color: AppColors.white),
-                    ),
+            // Back at the start, language switch at the end (both sides
+            // follow the text direction).
+            Row(
+              children: [
+                if (onBack == null)
+                  const SizedBox(height: 48)
+                else
+                  IconButton(
+                    onPressed: onBack,
+                    tooltip: 'Back',
+                    icon: const Icon(Icons.arrow_back, color: AppColors.white),
+                  ),
+                const Spacer(),
+                const LanguageToggleButton(color: AppColors.white),
+              ],
             ),
             Container(
               width: 80,

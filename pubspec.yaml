@@ -11,6 +11,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
 
   cupertino_icons: ^1.0.8
   dio: ^5.9.0
@@ -39,6 +41,8 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  # Generates AppLocalizations from lib/l10n/*.arb (settings in l10n.yaml).
+  generate: true
 
   assets:
     - assets/images/
@@ -93,6 +97,26 @@ flutter:
         - asset: assets/fonts/poppins/Poppins-ThinItalic.ttf
           weight: 100
           style: italic
+    # Arabic font (Poppins has no Arabic glyphs). SIL OFL 1.1, see
+    # assets/fonts/cairo/OFL.txt. Used for the `ar` locale only.
+    - family: Cairo
+      fonts:
+        - asset: assets/fonts/cairo/Cairo-ExtraLight.ttf
+          weight: 200
+        - asset: assets/fonts/cairo/Cairo-Light.ttf
+          weight: 300
+        - asset: assets/fonts/cairo/Cairo-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/cairo/Cairo-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/cairo/Cairo-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/cairo/Cairo-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/cairo/Cairo-ExtraBold.ttf
+          weight: 800
+        - asset: assets/fonts/cairo/Cairo-Black.ttf
+          weight: 900
 
 flutter_assets:
   assets_path: assets/images

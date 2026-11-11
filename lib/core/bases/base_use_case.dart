@@ -64,8 +64,16 @@ abstract class BaseUseCase<Params, Result> {
   }
 
   Future<void> _handleUnauthorized() async {
+    // The app language is a device setting, not session data: keep it, or
+    // the API (Accept-Language) would switch to English after a 401.
+    final String language = await SharedPrefHelper.getString(
+      SharedPrefKeys.userLanguage,
+    );
     await SharedPrefHelper.clearAllData();
     await SharedPrefHelper.clearAllSecuredData();
+    if (language.isNotEmpty) {
+      await SharedPrefHelper.setData(SharedPrefKeys.userLanguage, language);
+    }
     navigatorKey.currentState?.pushNamedAndRemoveUntil(
       RoutePath.login,
       (route) => false,

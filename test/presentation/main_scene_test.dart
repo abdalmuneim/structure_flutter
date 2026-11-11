@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:structure_flutter/core/routing/generate_route.dart';
 import 'package:structure_flutter/core/routing/route_path.dart';
+import 'package:structure_flutter/l10n/app_localizations.dart';
 import 'package:structure_flutter/presentation/modules/main/models/main_tab.dart';
 
 /// Opens the main route the same way the app does: by name, through
@@ -10,6 +11,8 @@ Future<void> _openMain(WidgetTester tester, {Object? arguments}) async {
   final navigatorKey = GlobalKey<NavigatorState>();
   await tester.pumpWidget(
     MaterialApp(
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
       navigatorKey: navigatorKey,
       home: const SizedBox(),
       onGenerateRoute: GenerateRoute.generateRoute,

@@ -11,6 +11,7 @@ import 'package:structure_flutter/core/routing/route_path.dart';
 import 'package:structure_flutter/data/models/register_request.dart';
 import 'package:structure_flutter/data/models/user.dart';
 import 'package:structure_flutter/domain/repos/auth_repo.dart';
+import 'package:structure_flutter/l10n/app_localizations.dart';
 import 'package:structure_flutter/main.dart';
 
 const _localPhone = '01012345678';
@@ -77,6 +78,8 @@ Future<void> _openLogin(WidgetTester tester, AuthRepo repo) async {
     Provider<AuthRepo>.value(
       value: repo,
       child: MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         initialRoute: RoutePath.login,
         onGenerateRoute: GenerateRoute.generateRoute,
         builder: BotToastInit(),

@@ -1,0 +1,12 @@
+{
+  "@@locale": "ar",
+
+  "appTitle": "VCare",
+
+  "languageEnglish": "English",
+  "languageArabic": "العربية",
+  "languageChange": "تغيير اللغة",
+
+  "settingsLanguage": "اللغة",
+  "settingsChooseLanguage": "اختر اللغة"
+}

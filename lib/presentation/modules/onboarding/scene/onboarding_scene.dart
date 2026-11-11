@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:structure_flutter/core/bases/base_scene.dart';
 import 'package:structure_flutter/presentation/components/utils/ui/ui.dart';
 import 'package:structure_flutter/presentation/components/widgets/app_button.dart';
+import 'package:structure_flutter/presentation/components/widgets/language_switcher.dart';
 import 'package:structure_flutter/presentation/modules/onboarding/models/onboarding_item.dart';
 import 'package:structure_flutter/presentation/modules/onboarding/providers/onboarding_provider.dart';
 
@@ -28,22 +29,30 @@ class _OnboardingSceneState
       body: SafeArea(
         child: Column(
           children: [
-            // Skip button
+            // Language switch at the start, Skip at the end (both sides
+            // follow the text direction).
             Padding(
-              padding: const EdgeInsets.only(top: 8, right: 8),
-              child: Align(
-                alignment: Alignment.topRight,
-                child: TextButton(
-                  onPressed: () => provider.skip(),
-                  child: Text(
-                    'Skip',
-                    style: TextStyle(
-                      fontSize: 15,
-                      color: Colors.grey[500],
-                      fontWeight: FontWeight.w500,
+              padding: const EdgeInsetsDirectional.only(
+                top: 8,
+                start: 8,
+                end: 8,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  LanguageToggleButton(color: Colors.grey[600]),
+                  TextButton(
+                    onPressed: () => provider.skip(),
+                    child: Text(
+                      'Skip',
+                      style: TextStyle(
+                        fontSize: 15,
+                        color: Colors.grey[500],
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   ),
-                ),
+                ],
               ),
             ),
 

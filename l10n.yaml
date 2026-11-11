@@ -1,0 +1,8 @@
+# Flutter gen-l10n settings. Run `flutter gen-l10n` after editing an .arb file
+# (it also runs automatically on `flutter run` / `flutter build`).
+# app_en.arb is the template: every key is added there first, with an
+# @description when its meaning isn't obvious, then translated in app_ar.arb.
+arb-dir: lib/l10n
+template-arb-file: app_en.arb
+output-localization-file: app_localizations.dart
+output-class: AppLocalizations

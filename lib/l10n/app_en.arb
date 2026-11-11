@@ -1,0 +1,30 @@
+{
+  "@@locale": "en",
+
+  "appTitle": "VCare",
+  "@appTitle": {
+    "description": "Brand name, shown as the app/task-switcher title. Kept as the brand in every language."
+  },
+
+  "languageEnglish": "English",
+  "@languageEnglish": {
+    "description": "Name of the English language, always written in English (endonym)."
+  },
+  "languageArabic": "العربية",
+  "@languageArabic": {
+    "description": "Name of the Arabic language, always written in Arabic (endonym)."
+  },
+  "languageChange": "Change language",
+  "@languageChange": {
+    "description": "Tooltip of the button that switches the app language."
+  },
+
+  "settingsLanguage": "Language",
+  "@settingsLanguage": {
+    "description": "Settings row that opens the language picker."
+  },
+  "settingsChooseLanguage": "Choose language",
+  "@settingsChooseLanguage": {
+    "description": "Title of the bottom sheet that lists the available languages."
+  }
+}

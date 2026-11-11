@@ -63,6 +63,18 @@ void main() {
     );
   });
 
+  test('401 clears the session but keeps the app language', () async {
+    SharedPreferences.setMockInitialValues({
+      SharedPrefKeys.userLanguage: 'ar',
+      SharedPrefKeys.isLoggedIn: true,
+    });
+
+    await _TestUseCase().call(() => _failWith(401, null));
+
+    expect(await SharedPrefHelper.getBool(SharedPrefKeys.isLoggedIn), isFalse);
+    expect(await SharedPrefHelper.getString(SharedPrefKeys.userLanguage), 'ar');
+  });
+
   test('a throwing handleError callback still returns Failure', () async {
     final useCase = _TestUseCase(
       handleError: (_) => throw StateError('callback failed'),
